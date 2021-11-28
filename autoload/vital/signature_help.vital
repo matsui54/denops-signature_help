@@ -1,0 +1,6 @@
+signature_help
+828fb485d4a2ef74a36cb9af469fa79b4e97b20d
+
+VS.Vim.Buffer
+VS.Vim.Window.FloatingWindow
+VS.Vim.Window
