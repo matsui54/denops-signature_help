@@ -84,7 +84,7 @@ export class SigHandler {
   async changeHighlight(denops: Denops, hl: [number, number]) {
     await denops.call(
       "signature_help#doc#change_highlight",
-      {hl: hl},
+      { hl: hl },
     );
   }
 
@@ -126,7 +126,6 @@ export class SigHandler {
   ): Promise<void> {
     info.lines = trimLines(info.lines);
     const mode = await fn.mode(denops);
-    console.log(mode)
     // if allow select mode, vsnip's jump becomes unavailable
     if (!info.lines?.length || !mode.startsWith("i")) {
       this.closeWin(denops);
@@ -144,14 +143,12 @@ export class SigHandler {
     }
     this.prevItem = info.help;
 
+    const screenrow = await fn.screenrow(denops) as number;
     const maxWidth = Math.min(
       await op.columns.get(denops),
       config.maxWidth,
     );
-    const maxHeight = Math.min(
-      (await fn.screenrow(denops) as number) - 1,
-      config.maxHeight,
-    );
+    const maxHeight = Math.min(screenrow - 1, config.maxHeight);
     const col = await this.calcWinPos(denops, info);
 
     const hiCtx = await getStylizeCommands(denops, info.lines, {
@@ -163,8 +160,8 @@ export class SigHandler {
     });
 
     const floatingOpt: FloatOption = {
-      row: 0,
-      col: col - 1,
+      row: screenrow - hiCtx.height - (config.border ? 2 : 0),
+      col: col + (await fn.screencol(denops) as number),
       border: config.border,
     };
     // const floatingOpt: FloatOption = {
@@ -175,7 +172,6 @@ export class SigHandler {
     //   border: config.border,
     // };
 
-    console.log(hiCtx)
     await denops.call(
       "signature_help#doc#show_floating",
       {
