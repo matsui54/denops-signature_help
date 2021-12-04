@@ -1,4 +1,5 @@
 import { batch, Denops, fn, gather, vars } from "./deps.ts";
+import { SignatureHelp } from "./types.ts";
 type MarkedString = string | { language: string; value: string };
 export type MarkupKind = "plaintext" | "markdown";
 export type MarkupContent = {
@@ -44,6 +45,77 @@ export function convertInputToMarkdownLines(
   }
 
   return contents;
+}
+
+export function convertSignatureHelpToMarkdownLines(
+  signatureHelp: SignatureHelp,
+  ft: string,
+  triggers: string[],
+): [string[], [number, number]] | null {
+  if (!signatureHelp.signatures) return null;
+  let activeHl: [number, number] = [0, 0];
+  const activeSignature =
+    (signatureHelp.activeSignature ? signatureHelp.activeSignature : 0);
+  // if (activeSignature >= signatureHelp.signatures.length) {
+  //   activeSignature = 0;
+  // }
+  const signature = signatureHelp.signatures[activeSignature - 1];
+  if (!signature) return null;
+
+  let label = signature.label;
+  if (ft) {
+    label = "```" + ft + "\n" + label + "\n```";
+  }
+  let contents = label.split("\n");
+  if (signature.documentation) {
+    contents = convertInputToMarkdownLines(signature.documentation, contents);
+  }
+  if (signature.parameters?.length) {
+    const activeParameter = signature.activeParameter
+      ? signature.activeParameter
+      : signatureHelp.activeParameter
+      ? signatureHelp.activeParameter
+      : 0;
+    // if (activeParameter < 0) activeParameter = 0;
+
+    const parameter = signature.parameters[activeParameter];
+    if (parameter) {
+      if (parameter.label) {
+        if (typeof (parameter.label) == "object") {
+          activeHl = parameter.label;
+        } else {
+          let offset = 0;
+          for (const t of triggers) {
+            const triggerOffset = signature.label.search(t);
+            if (
+              triggerOffset != -1 && (!offset || triggerOffset < offset)
+            ) {
+              offset = triggerOffset;
+            }
+          }
+          for (let i = 0; i < signature.parameters.length; i++) {
+            const param = signature.parameters[i];
+            const labelOffset = signature.label.slice(offset).search(
+              param.label as string,
+            ) + offset;
+            if (labelOffset < offset) break;
+            if (i == activeParameter) {
+              activeHl = [labelOffset, labelOffset + parameter.label.length];
+              break;
+            }
+            offset = labelOffset + param.label.length;
+          }
+        }
+      }
+      if (parameter.documentation) {
+        contents = convertInputToMarkdownLines(
+          parameter.documentation,
+          contents,
+        );
+      }
+    }
+  }
+  return [contents, activeHl];
 }
 
 export async function makeFloatingwinSize(
@@ -282,8 +354,10 @@ export async function getStylizeCommands(
   ) {
     if (!ft) {
       cmds.push(
-        `syntax region markdownCode start=/\\%${start}l/ end=/\\%${finish +
-          1}l/ keepend extend`,
+        `syntax region markdownCode start=/\\%${start}l/ end=/\\%${
+          finish +
+          1
+        }l/ keepend extend`,
       );
       return;
     }
@@ -297,8 +371,10 @@ export async function getStylizeCommands(
       langs[lang] = true;
     }
     cmds.push(
-      `syntax region ${name} start=/\\%${start}l/ end=/\\%${finish +
-        1}l/ contains=${lang} keepend`,
+      `syntax region ${name} start=/\\%${start}l/ end=/\\%${
+        finish +
+        1
+      }l/ contains=${lang} keepend`,
     );
   }
 
