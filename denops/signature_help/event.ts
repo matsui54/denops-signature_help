@@ -14,8 +14,6 @@ export type SignatureHelpOptions = {
 
 export type SighelpResponce = {
   help: SignatureHelp;
-  lines: string[];
-  hl: [number, number];
   triggers: string[];
 };
 

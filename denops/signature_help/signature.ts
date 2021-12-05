@@ -2,7 +2,10 @@ import { SighelpResponce } from "./event.ts";
 import { Denops, fn, op } from "./deps.ts";
 import { FloatOption, SignatureHelp } from "./types.ts";
 import { Config } from "./config.ts";
-import { getStylizeCommands } from "./markdown.ts";
+import {
+  convertSignatureHelpToMarkdownLines,
+  getStylizeCommands,
+} from "./markdown.ts";
 
 export function trimLines(lines: string[] | undefined): string[] {
   if (!lines) return [];
@@ -124,10 +127,16 @@ export class SigHandler {
     info: SighelpResponce,
     config: Config,
   ): Promise<void> {
-    info.lines = trimLines(info.lines);
+    const maybe = convertSignatureHelpToMarkdownLines(
+      info.help,
+      await op.filetype.getLocal(denops),
+      info.triggers,
+    );
+    if (!maybe) return;
+    const [lines, hl] = maybe;
     const mode = await fn.mode(denops);
     // if allow select mode, vsnip's jump becomes unavailable
-    if (!info.lines?.length || !mode.startsWith("i")) {
+    if (!lines?.length || !mode.startsWith("i")) {
       this.closeWin(denops);
       return;
     }
@@ -136,7 +145,7 @@ export class SigHandler {
       if (this.isSamePosition(info.help)) {
         return;
       } else {
-        this.changeHighlight(denops, info.hl);
+        this.changeHighlight(denops, hl);
         this.prevItem = info.help;
         return;
       }
@@ -151,7 +160,7 @@ export class SigHandler {
     const maxHeight = Math.min(screenrow - 1, config.maxHeight);
     const col = await this.calcWinPos(denops, info);
 
-    const hiCtx = await getStylizeCommands(denops, info.lines, {
+    const hiCtx = await getStylizeCommands(denops, lines, {
       maxWidth: maxWidth,
       maxHeight: maxHeight,
       separator: "",
@@ -164,13 +173,6 @@ export class SigHandler {
       col: col + (await fn.screencol(denops) as number),
       border: config.border,
     };
-    // const floatingOpt: FloatOption = {
-    //   row: pumInfo.row + 1,
-    //   col: align == "right"
-    //     ? rightCol + 1
-    //     : leftCol - hiCtx.width - (config.border ? 2 : 0),
-    //   border: config.border,
-    // };
 
     await denops.call(
       "signature_help#doc#show_floating",
@@ -183,6 +185,7 @@ export class SigHandler {
         syntax: "markdown",
         winblend: config.winblend,
         cmds: hiCtx.commands,
+        hl: hl,
       },
     ) as number;
   }

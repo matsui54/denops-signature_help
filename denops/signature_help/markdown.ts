@@ -275,7 +275,7 @@ export async function getHighlights(
       });
       // add separator
       if (i < contents.length) {
-        stripped.push("");
+        stripped.push("---");
         markdownLines[stripped.length - 1] = true;
       }
     } else {

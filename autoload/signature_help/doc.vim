@@ -35,12 +35,31 @@ function! signature_help#doc#set_buffer(opts) abort
   return bufnr 
 endfunction
 
+function! s:get_namespace() abort
+  return nvim_create_namespace("dps_signature_help")
+endfunction
+
+" hl: [number, number]
+function! signature_help#doc#change_highlight(opts) abort
+  let opts = a:opts
+  let bufnr = s:win.get_bufnr()
+  let ns = s:get_namespace()
+  if has('nvim')
+    call nvim_buf_clear_namespace(bufnr, ns, 0, -1)
+    if len(opts.hl) == 2
+      call nvim_buf_add_highlight(bufnr, ns, "LspSignatureActiveParameter", 0,
+            \ opts.hl[0], opts.hl[1])
+    endif
+  endif
+endfunction
+
 " floatOpt: FloatOption;
 " events: autocmd.AutocmdEvent[];
 " width: number;
 " height: number;
 " cmds: string[]
 " syntax: string
+" hl: [number, number]
 function! signature_help#doc#show_floating(opts) abort
   if getcmdwintype() !=# ''
     call s:win.close()
@@ -66,6 +85,7 @@ function! signature_help#doc#show_floating(opts) abort
       call s:win.set_var('&winblend', opts.winblend)
     endif
   endif
+  call signature_help#doc#change_highlight(opts)
   if len(opts.events)
     execute printf("autocmd %s <buffer> ++once call signature_help#doc#close_floating({})",
           \ join(opts.events, ','))
