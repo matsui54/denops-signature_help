@@ -54,12 +54,11 @@ export function convertSignatureHelpToMarkdownLines(
 ): [string[], [number, number]] | null {
   if (!signatureHelp.signatures) return null;
   let activeHl: [number, number] = [0, 0];
-  const activeSignature =
-    (signatureHelp.activeSignature ? signatureHelp.activeSignature : 0);
+  const activeSignature = (signatureHelp.activeSignature || 0);
   // if (activeSignature >= signatureHelp.signatures.length) {
   //   activeSignature = 0;
   // }
-  const signature = signatureHelp.signatures[activeSignature - 1];
+  const signature = signatureHelp.signatures[activeSignature];
   if (!signature) return null;
 
   let label = signature.label;
@@ -71,11 +70,8 @@ export function convertSignatureHelpToMarkdownLines(
     contents = convertInputToMarkdownLines(signature.documentation, contents);
   }
   if (signature.parameters?.length) {
-    const activeParameter = signature.activeParameter
-      ? signature.activeParameter
-      : signatureHelp.activeParameter
-      ? signatureHelp.activeParameter
-      : 0;
+    const activeParameter = signature.activeParameter ||
+      signatureHelp.activeParameter || 0;
     // if (activeParameter < 0) activeParameter = 0;
 
     const parameter = signature.parameters[activeParameter];
@@ -86,7 +82,7 @@ export function convertSignatureHelpToMarkdownLines(
         } else {
           let offset = 0;
           for (const t of triggers) {
-            const triggerOffset = signature.label.search(t);
+            const triggerOffset = signature.label.indexOf(t);
             if (
               triggerOffset != -1 && (!offset || triggerOffset < offset)
             ) {
@@ -95,12 +91,16 @@ export function convertSignatureHelpToMarkdownLines(
           }
           for (let i = 0; i < signature.parameters.length; i++) {
             const param = signature.parameters[i];
-            const labelOffset = signature.label.slice(offset).search(
+            const labelOffset = signature.label.indexOf(
               param.label as string,
-            ) + offset;
-            if (labelOffset < offset) break;
+              offset,
+            );
+            if (labelOffset == -1) break;
             if (i == activeParameter) {
-              activeHl = [labelOffset, labelOffset + parameter.label.length];
+              activeHl = [
+                labelOffset,
+                labelOffset + parameter.label.length,
+              ];
               break;
             }
             offset = labelOffset + param.label.length;
@@ -228,7 +228,7 @@ export async function getHighlights(
       if (match) {
         return {
           type: type,
-          ft: matcher.ft ? matcher.ft : match[1] ? match[1] : null,
+          ft: matcher.ft || match[1] || null,
         };
       }
     }
@@ -248,7 +248,7 @@ export async function getHighlights(
     if (match) {
       const start = stripped.length;
       if (match.ft) {
-        match.ft = fences[match.ft] ? fences[match.ft] : match.ft;
+        match.ft = fences[match.ft] || match.ft;
       }
       i++;
       // if (contents[i] && !matchEnd(contents[i], match)) {
@@ -361,7 +361,7 @@ export async function getStylizeCommands(
       );
       return;
     }
-    ft = fences[ft] ? fences[ft] : ft;
+    ft = fences[ft] || ft;
     const name = ft + index;
     index++;
     const lang = "@" + ft.toUpperCase();
