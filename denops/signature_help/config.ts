@@ -1,12 +1,11 @@
+export type signatureStyle = "labelOnly" | "currentLabelOnly" | "full";
 export type Config = {
   border: boolean;
   maxWidth: number;
   maxHeight: number;
   winblend?: number;
-  supportVsnip: boolean;
-  supportInfo: boolean;
-  supportUltisnips: boolean;
   delay: number;
+  style: signatureStyle;
 };
 
 export function getDefaultDocConfig(): Config {
@@ -14,10 +13,8 @@ export function getDefaultDocConfig(): Config {
     border: true,
     maxWidth: 80,
     maxHeight: 30,
-    supportVsnip: true,
-    supportInfo: true,
-    supportUltisnips: true,
     delay: 50,
+    style: "full",
   };
 }
 

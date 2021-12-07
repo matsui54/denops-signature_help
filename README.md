@@ -6,3 +6,4 @@ Show signature help from lsp server.
 - [ ] Vim support
 - [ ] add labelOnly option
 - [ ] add currentLabelOnly option
+- [ ] add toggle mapping

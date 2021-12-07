@@ -77,7 +77,7 @@ Deno.test("getMarkdownFences", () => {
   });
 });
 
-const result_ccls: SignatureHelp = {
+const resultCcls: SignatureHelp = {
   "activeParameter": 0,
   "activeSignature": 0,
   "signatures": [
@@ -115,21 +115,21 @@ const result_ccls: SignatureHelp = {
     },
   ],
 };
-console.log(convertSignatureHelpToMarkdownLines(result_ccls, "", [","]));
-result_ccls.activeSignature = 1;
-console.log(convertSignatureHelpToMarkdownLines(result_ccls, "", [","]));
-result_ccls.activeSignature = 2;
-console.log(convertSignatureHelpToMarkdownLines(result_ccls, "", [","]));
-result_ccls.activeSignature = 3;
-console.log(convertSignatureHelpToMarkdownLines(result_ccls, "", [","]));
-result_ccls.activeSignature = 4;
-console.log(convertSignatureHelpToMarkdownLines(result_ccls, "", [","]));
-result_ccls.activeSignature = 5;
-console.log(convertSignatureHelpToMarkdownLines(result_ccls, "", [","]));
-result_ccls.activeParameter = 1;
-console.log(convertSignatureHelpToMarkdownLines(result_ccls, "", [","]));
-result_ccls.activeParameter = 2;
-console.log(convertSignatureHelpToMarkdownLines(result_ccls, "c", [","]));
+console.log(convertSignatureHelpToMarkdownLines(resultCcls, "", [","]));
+resultCcls.activeSignature = 1;
+console.log(convertSignatureHelpToMarkdownLines(resultCcls, "", [","]));
+resultCcls.activeSignature = 2;
+console.log(convertSignatureHelpToMarkdownLines(resultCcls, "", [","]));
+resultCcls.activeSignature = 3;
+console.log(convertSignatureHelpToMarkdownLines(resultCcls, "", [","]));
+resultCcls.activeSignature = 4;
+console.log(convertSignatureHelpToMarkdownLines(resultCcls, "", [","]));
+resultCcls.activeSignature = 5;
+console.log(convertSignatureHelpToMarkdownLines(resultCcls, "", [","]));
+resultCcls.activeParameter = 1;
+console.log(convertSignatureHelpToMarkdownLines(resultCcls, "", [","]));
+resultCcls.activeParameter = 2;
+console.log(convertSignatureHelpToMarkdownLines(resultCcls, "c", [","]));
 
 const result = {
   activeParameter: 0,

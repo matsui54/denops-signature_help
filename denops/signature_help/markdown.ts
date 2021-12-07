@@ -1,5 +1,7 @@
-import { batch, Denops, fn, gather, vars } from "./deps.ts";
+import { Denops, fn, gather, vars } from "./deps.ts";
 import { SignatureHelp } from "./types.ts";
+import { signatureStyle } from "./config.ts";
+
 type MarkedString = string | { language: string; value: string };
 export type MarkupKind = "plaintext" | "markdown";
 export type MarkupContent = {
@@ -51,13 +53,11 @@ export function convertSignatureHelpToMarkdownLines(
   signatureHelp: SignatureHelp,
   ft: string,
   triggers: string[],
-): [string[], [number, number]] | null {
+  style: signatureStyle,
+): [string[], [number, number] | null] | null {
   if (!signatureHelp.signatures) return null;
   let activeHl: [number, number] = [0, 0];
   const activeSignature = (signatureHelp.activeSignature || 0);
-  // if (activeSignature >= signatureHelp.signatures.length) {
-  //   activeSignature = 0;
-  // }
   const signature = signatureHelp.signatures[activeSignature];
   if (!signature) return null;
 
@@ -66,17 +66,31 @@ export function convertSignatureHelpToMarkdownLines(
     label = "```" + ft + "\n" + label + "\n```";
   }
   let contents = label.split("\n");
+
+  if (style == "labelOnly") {
+    return [contents, null];
+  }
+
   if (signature.documentation) {
     contents = convertInputToMarkdownLines(signature.documentation, contents);
   }
   if (signature.parameters?.length) {
     const activeParameter = signature.activeParameter ||
       signatureHelp.activeParameter || 0;
-    // if (activeParameter < 0) activeParameter = 0;
 
     const parameter = signature.parameters[activeParameter];
     if (parameter) {
       if (parameter.label) {
+        if (style == "currentLabelOnly") {
+          if (typeof (parameter.label) == "object") {
+            return [
+              signature.label.slice(...parameter.label).split("\n"),
+              null,
+            ];
+          } else {
+            return [parameter.label.split("\n"), null];
+          }
+        }
         if (typeof (parameter.label) == "object") {
           activeHl = parameter.label;
         } else {
