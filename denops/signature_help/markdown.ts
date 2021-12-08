@@ -61,15 +61,9 @@ export function convertSignatureHelpToMarkdownLines(
   const signature = signatureHelp.signatures[activeSignature];
   if (!signature) return null;
 
-  let label = signature.label;
-  if (ft) {
-    label = "```" + ft + "\n" + label + "\n```";
-  }
-  let contents = label.split("\n");
-
-  if (style == "labelOnly") {
-    return [contents, null];
-  }
+  const label = signature.label;
+  const blockedLabel = ft ? "```" + ft + "\n" + label + "\n```" : label;
+  let contents = blockedLabel.split("\n");
 
   if (signature.documentation) {
     contents = convertInputToMarkdownLines(signature.documentation, contents);
@@ -128,6 +122,9 @@ export function convertSignatureHelpToMarkdownLines(
         );
       }
     }
+  }
+  if (style == "labelOnly") {
+    return [blockedLabel.split("\n"), activeHl];
   }
   return [contents, activeHl];
 }

@@ -39,36 +39,36 @@ Deno.test("convertInputToMarkdownLines", () => {
   );
 });
 
-Deno.test("getHighlights", () => {
-  assertEquals(
-    getHighlights([
-      "hoge",
-      "```c",
-      "int a = 1",
-      "a=20",
-      "```",
-      "print",
-      "```python",
-      "a = 10",
-      "```",
-    ]),
-    [[
-      "hoge",
-      "int a = 1",
-      "a=20",
-      "print",
-      "a = 10",
-    ], [{
-      ft: "c",
-      start: 2,
-      finish: 3,
-    }, {
-      ft: "python",
-      start: 5,
-      finish: 5,
-    }]],
-  );
-});
+// Deno.test("getHighlights", () => {
+//   assertEquals(
+//     getHighlights([
+//       "hoge",
+//       "```c",
+//       "int a = 1",
+//       "a=20",
+//       "```",
+//       "print",
+//       "```python",
+//       "a = 10",
+//       "```",
+//     ]),
+//     [[
+//       "hoge",
+//       "int a = 1",
+//       "a=20",
+//       "print",
+//       "a = 10",
+//     ], [{
+//       ft: "c",
+//       start: 2,
+//       finish: 3,
+//     }, {
+//       ft: "python",
+//       start: 5,
+//       finish: 5,
+//     }]],
+//   );
+// });
 
 Deno.test("getMarkdownFences", () => {
   assertEquals(getMarkdownFences(["ts=typescript", "foo=hoge"]), {
@@ -115,29 +115,12 @@ const resultCcls: SignatureHelp = {
     },
   ],
 };
-console.log(convertSignatureHelpToMarkdownLines(resultCcls, "", [","]));
-resultCcls.activeSignature = 1;
-console.log(convertSignatureHelpToMarkdownLines(resultCcls, "", [","]));
-resultCcls.activeSignature = 2;
-console.log(convertSignatureHelpToMarkdownLines(resultCcls, "", [","]));
-resultCcls.activeSignature = 3;
-console.log(convertSignatureHelpToMarkdownLines(resultCcls, "", [","]));
-resultCcls.activeSignature = 4;
-console.log(convertSignatureHelpToMarkdownLines(resultCcls, "", [","]));
-resultCcls.activeSignature = 5;
-console.log(convertSignatureHelpToMarkdownLines(resultCcls, "", [","]));
-resultCcls.activeParameter = 1;
-console.log(convertSignatureHelpToMarkdownLines(resultCcls, "", [","]));
-resultCcls.activeParameter = 2;
-console.log(convertSignatureHelpToMarkdownLines(resultCcls, "c", [","]));
-
 const result = {
   activeParameter: 0,
   activeSignature: 0,
   signatures: [
     {
-      documentation:
-        "Date returns the Time corresponding to\n\tyyyy-mm-dd hh:mm:ss + nsec nanoseconds\nin the appropriate zone for that time in the given location.\n\nThe month, day, hour, min, sec, and nsec values may be outside\ntheir usual ranges and will be normalized during the conversion.\nFor example, October 32 converts to November 1.\n\nA daylight savings time transition skips or repeats times.\nFor example, in the United States, March 13, 2011 2:15am never occurred,\nwhile November 6, 2011 1:15am occurred twice. In such cases, the\nchoice of time zone, and therefore the time, is not well-defined.\nDate returns a time that is correct in one of the two zones involved\nin the transition, but it does not guarantee which.\n\nDate panics if loc is nil.\n",
+      documentation: "line1\nline2",
       label:
         "Date(year int, month time.Month, day int, hour int, min int, sec int, nsec int, loc *time.Location) time.Time",
       parameters: [
@@ -153,6 +136,71 @@ const result = {
     },
   ],
 };
-console.log(convertSignatureHelpToMarkdownLines(result, "", ["(", ","]));
-result.activeParameter = 1;
-console.log(convertSignatureHelpToMarkdownLines(result, "", []));
+
+Deno.test("convertSignatureHelpToMarkdownLines", () => {
+  assertEquals(
+    convertSignatureHelpToMarkdownLines(resultCcls, "", [","], "full"),
+    [["func() -> int", "no args s1"], [0, 0]],
+  );
+  resultCcls.activeSignature = 1;
+  assertEquals(
+    convertSignatureHelpToMarkdownLines(resultCcls, "", [","], "full"),
+    [["func(int a) -> int", "one int arg s2"], [5, 10]],
+  );
+  resultCcls.activeSignature = 5;
+  assertEquals(
+    convertSignatureHelpToMarkdownLines(resultCcls, "", [","], "full"),
+    [["func(int a, int b, int c) -> int", "three args"], [5, 10]],
+  );
+  resultCcls.activeParameter = 2;
+  assertEquals(
+    convertSignatureHelpToMarkdownLines(resultCcls, "c", [","], "full"),
+    [
+      ["```c", "func(int a, int b, int c) -> int", "```", "three args"],
+      [19, 24],
+    ],
+  );
+  assertEquals(
+    convertSignatureHelpToMarkdownLines(resultCcls, "c", [","], "labelOnly"),
+    [
+      ["```c", "func(int a, int b, int c) -> int", "```"],
+      [19, 24],
+    ],
+  );
+  assertEquals(
+    convertSignatureHelpToMarkdownLines(
+      resultCcls,
+      "",
+      [","],
+      "currentLabelOnly",
+    ),
+    [["int c"], null],
+  );
+  assertEquals(
+    convertSignatureHelpToMarkdownLines(result, "ft", ["(", ","], "full"),
+    [
+      [
+        "```ft",
+        "Date(year int, month time.Month, day int, hour int, min int, sec int, nsec int, loc *time.Location) time.Time",
+        "```",
+        "line1",
+        "line2",
+      ],
+      [5, 13],
+    ],
+  );
+  result.activeParameter = 1;
+  assertEquals(
+    convertSignatureHelpToMarkdownLines(result, "ft", ["(", ","], "full"),
+    [
+      [
+        "```ft",
+        "Date(year int, month time.Month, day int, hour int, min int, sec int, nsec int, loc *time.Location) time.Time",
+        "```",
+        "line1",
+        "line2",
+      ],
+      [15, 31],
+    ],
+  );
+});
