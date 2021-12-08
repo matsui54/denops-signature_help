@@ -66,7 +66,7 @@ export class EventHandler {
   async getConfig(denops: Denops): Promise<void> {
     const users = await vars.g.get(
       denops,
-      "popup_preview_config",
+      "signature_help_config",
       {},
     ) as Config;
     this.config = makeConfig(users);

@@ -131,6 +131,7 @@ export class SigHandler {
       info.help,
       await op.filetype.getLocal(denops),
       info.triggers,
+      config.style,
     );
     if (!maybe) return;
     const [lines, hl] = maybe;
