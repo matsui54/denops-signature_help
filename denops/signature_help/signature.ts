@@ -84,7 +84,7 @@ export class SigHandler {
     );
   }
 
-  async changeHighlight(denops: Denops, hl: [number, number]) {
+  async changeHighlight(denops: Denops, hl: null | [number, number]) {
     await denops.call(
       "signature_help#doc#change_highlight",
       { hl: hl },
@@ -145,7 +145,7 @@ export class SigHandler {
     if (this.isSameSignature(info.help)) {
       if (this.isSamePosition(info.help)) {
         return;
-      } else {
+      } else if (config.style != "currentLabelOnly") {
         this.changeHighlight(denops, hl);
         this.prevItem = info.help;
         return;
@@ -159,7 +159,9 @@ export class SigHandler {
       config.maxWidth,
     );
     const maxHeight = Math.min(screenrow - 1, config.maxHeight);
-    const col = await this.calcWinPos(denops, info);
+    const col = config.style == "currentLabelOnly"
+      ? 0
+      : await this.calcWinPos(denops, info);
 
     const hiCtx = await getStylizeCommands(denops, lines, {
       maxWidth: maxWidth,

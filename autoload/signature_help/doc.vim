@@ -42,6 +42,9 @@ endfunction
 " hl: [number, number]
 function! signature_help#doc#change_highlight(opts) abort
   let opts = a:opts
+  if empty(opts.hl)
+    return
+  endif
   let bufnr = s:win.get_bufnr()
   let ns = s:get_namespace()
   if has('nvim')
@@ -59,7 +62,7 @@ endfunction
 " height: number;
 " cmds: string[]
 " syntax: string
-" hl: [number, number]
+" hl?: [number, number]
 function! signature_help#doc#show_floating(opts) abort
   if getcmdwintype() !=# ''
     call s:win.close()
