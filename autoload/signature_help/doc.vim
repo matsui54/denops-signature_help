@@ -46,13 +46,24 @@ function! signature_help#doc#change_highlight(opts) abort
     return
   endif
   let bufnr = s:win.get_bufnr()
-  let ns = s:get_namespace()
   if has('nvim')
+    let ns = s:get_namespace()
     call nvim_buf_clear_namespace(bufnr, ns, 0, -1)
     if len(opts.hl) == 2
       call nvim_buf_add_highlight(bufnr, ns, "LspSignatureActiveParameter", 0,
             \ opts.hl[0], opts.hl[1])
     endif
+  else
+    if empty(prop_type_get("dps_signature_help"))
+      call prop_type_add("dps_signature_help", {
+            \ 'highlight': "Search",
+            \ })
+    endif
+    call prop_add(1, opts.hl[0]+1, {
+          \ 'length': opts.hl[1] - opts.hl[0],
+          \ 'type': "dps_signature_help",
+          \ 'bufnr': bufnr,
+          \ })
   endif
 endfunction
 
