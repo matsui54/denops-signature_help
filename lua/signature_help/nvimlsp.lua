@@ -11,7 +11,7 @@ local respond = function(item)
   api.nvim_call_function('signature_help#notify', {'respond', {item}})
 end
 
-local get_signature_help = function(arg)
+local request_signature_help = function(arg)
   local params = vim.lsp.util.make_position_params()
   vim.lsp.buf_request(0, "textDocument/signatureHelp", params, function(_, arg1, arg2)
     local res = is_new_handler(arg1) and arg1 or arg2
@@ -19,7 +19,7 @@ local get_signature_help = function(arg)
       -- local ft = api.nvim_buf_get_option(0, 'filetype')
       -- local converted, hl = vim.lsp.util.convert_signature_help_to_markdown_lines(res, ft)
       -- respond({help = res, lines = converted, hl = hl, triggers = arg.triggers})
-      respond({help = res, triggers = arg.triggers})
+      respond(res)
     else
       respond({help = res})
     end
@@ -36,6 +36,6 @@ local get_capabilities = function()
 end
 
 return {
-  get_signature_help = get_signature_help,
+  request_signature_help = request_signature_help,
   get_capabilities = get_capabilities,
 }

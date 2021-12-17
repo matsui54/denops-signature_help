@@ -1,7 +1,7 @@
-import { SighelpResponce } from "./event.ts";
 import { Denops, fn, op } from "./deps.ts";
 import { FloatOption, SignatureHelp } from "./types.ts";
 import { Config } from "./config.ts";
+import { requestSignatureHelp } from "./integ.ts";
 import {
   convertSignatureHelpToMarkdownLines,
   getStylizeCommands,
@@ -64,17 +64,15 @@ export function getFunctionName(
 
 export class SigHandler {
   private prevItem: SignatureHelp = {} as SignatureHelp;
+  private triggers: string[] = [];
 
   onInsertEnter() {
     this.prevItem = {} as SignatureHelp;
   }
 
   async requestSighelp(denops: Denops, triggers: string[]) {
-    await denops.call(
-      "luaeval",
-      "require('signature_help.nvimlsp').get_signature_help(_A.arg)",
-      { arg: { triggers: triggers } },
-    );
+    this.triggers = triggers;
+    requestSignatureHelp(denops);
   }
 
   async closeWin(denops: Denops) {
@@ -105,11 +103,11 @@ export class SigHandler {
   // return floating windows column offset from cursor position
   private async calcWinPos(
     denops: Denops,
-    info: SighelpResponce,
+    help: SignatureHelp,
   ): Promise<number> {
-    const label = info.help.signatures[0].label;
+    const label = help.signatures[0].label;
     const cursorCol = await fn.col(denops, ".");
-    const match = getFunctionName(info.triggers, label);
+    const match = getFunctionName(this.triggers, label);
     if (!match) {
       return 0;
     }
@@ -124,13 +122,13 @@ export class SigHandler {
 
   async showSignatureHelp(
     denops: Denops,
-    info: SighelpResponce,
+    help: SignatureHelp,
     config: Config,
   ): Promise<void> {
     const maybe = convertSignatureHelpToMarkdownLines(
-      info.help,
+      help,
       await op.filetype.getLocal(denops),
-      info.triggers,
+      this.triggers,
       config.style,
     );
     if (!maybe) return;
@@ -142,16 +140,16 @@ export class SigHandler {
       return;
     }
 
-    if (this.isSameSignature(info.help)) {
-      if (this.isSamePosition(info.help)) {
+    if (this.isSameSignature(help)) {
+      if (this.isSamePosition(help)) {
         return;
       } else if (config.style != "currentLabelOnly") {
         this.changeHighlight(denops, hl);
-        this.prevItem = info.help;
+        this.prevItem = help;
         return;
       }
     }
-    this.prevItem = info.help;
+    this.prevItem = help;
 
     const screenrow = await fn.screenrow(denops) as number;
     const maxWidth = Math.min(
@@ -161,7 +159,7 @@ export class SigHandler {
     const maxHeight = Math.min(screenrow - 1, config.maxHeight);
     const col = config.style == "currentLabelOnly"
       ? 0
-      : await this.calcWinPos(denops, info);
+      : await this.calcWinPos(denops, help);
 
     const hiCtx = await getStylizeCommands(denops, lines, {
       maxWidth: maxWidth,

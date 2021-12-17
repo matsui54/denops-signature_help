@@ -3,9 +3,9 @@ function s:respond(data) abort
     return
   endif
 
-  call signature#notify('respond', [{"item": a:data.response.result}])
+  call signature_help#notify('respond', [a:data.response.result])
 endfunction
-function signature#vimlsp#resolve(item) abort
+function signature_help#vimlsp#request_signature_help() abort
   let servers = filter(lsp#get_allowed_servers(), 'lsp#capabilities#has_signature_help_provider(v:val)')
 
   if len(servers) == 0

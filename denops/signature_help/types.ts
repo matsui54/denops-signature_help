@@ -31,6 +31,15 @@ export type FloatOption = {
   border?: boolean;
 };
 
+export type ServerCapabilities = {
+  signatureHelpProvider?: SignatureHelpOptions;
+};
+
+export type SignatureHelpOptions = {
+  triggerCharacters?: string[];
+  retriggerCharacters?: string[];
+};
+
 export type SignatureHelp = {
   /**
    * One or more signatures. If no signatures are available the signature help

@@ -1,21 +1,8 @@
 import { autocmd, Denops, fn, vars } from "./deps.ts";
-import { SignatureHelp } from "./types.ts";
+import { ServerCapabilities, SignatureHelp } from "./types.ts";
 import { Config, makeConfig } from "./config.ts";
 import { SigHandler } from "./signature.ts";
-
-interface ServerCapabilities {
-  signatureHelpProvider?: SignatureHelpOptions;
-}
-
-export type SignatureHelpOptions = {
-  triggerCharacters?: string[];
-  retriggerCharacters?: string[];
-};
-
-export type SighelpResponce = {
-  help: SignatureHelp;
-  triggers: string[];
-};
+import { getServerCapabilities } from "./integ.ts";
 
 const defaultTriggerCharacters = [",", "(", "<", "["];
 const triggerCloseCharacters = [")", ">", "]"];
@@ -23,19 +10,12 @@ const triggerCloseCharacters = [")", ">", "]"];
 export class EventHandler {
   private config: Config = {} as Config;
   private sigHandler = new SigHandler();
-  private capabilities = {} as ServerCapabilities;
-
-  private async getCapabilities(denops: Denops) {
-    this.capabilities = await denops.call(
-      "luaeval",
-      "require('signature_help.nvimlsp').get_capabilities()",
-    ) as ServerCapabilities;
-  }
+  private capabilities: ServerCapabilities | null = null;
 
   private async onInsertEnter(denops: Denops): Promise<void> {
     await this.getConfig(denops);
     this.sigHandler.onInsertEnter();
-    await this.getCapabilities(denops);
+    this.capabilities = await getServerCapabilities(denops);
     if (this.capabilities && this.capabilities.signatureHelpProvider) {
       this.sigHandler.requestSighelp(denops, defaultTriggerCharacters);
     }
@@ -77,7 +57,7 @@ export class EventHandler {
       this.onInsertEnter(denops);
     } else {
       if (!this.capabilities) {
-        await this.getCapabilities(denops);
+        this.capabilities = await getServerCapabilities(denops);
       }
       if (event == "TextChangedI" || event == "TextChangedP") {
         this.onTextChanged(denops);
@@ -85,7 +65,7 @@ export class EventHandler {
     }
   }
 
-  async onSighelpResponce(denops: Denops, arg: SighelpResponce) {
+  async onSighelpResponce(denops: Denops, arg: SignatureHelp) {
     await this.sigHandler.showSignatureHelp(
       denops,
       arg,

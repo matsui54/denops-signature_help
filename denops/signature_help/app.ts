@@ -1,5 +1,6 @@
 import { autocmd, batch, Denops, fn, gather, vars } from "./deps.ts";
-import { EventHandler, SighelpResponce } from "./event.ts";
+import { EventHandler } from "./event.ts";
+import { SignatureHelp } from "./types.ts";
 
 export async function main(denops: Denops) {
   const handler = new EventHandler();
@@ -15,7 +16,7 @@ export async function main(denops: Denops) {
     },
 
     async respond(arg1: unknown): Promise<void> {
-      await handler.onSighelpResponce(denops, arg1 as SighelpResponce);
+      await handler.onSighelpResponce(denops, arg1 as SignatureHelp);
     },
   };
 
