@@ -1,124 +1,113 @@
-*denops-popup-preview.txt*		Show completion documentation
+*denops-signature-help.txt*		Show signature help from lsp server
 
 Author : matsui54 <haru.matu9168@gmail.com>
 License: MIT license
 
-CONTENTS					*denops-popup-preview-contents*
+CONTENTS					*denops-signature-help-contents*
 
-Introduction		|denops-popup-preview-introduction|
-Usage			|denops-popup-preview-usage|
-Install			|denops-popup-preview-install|
-Interface		|denops-popup-preview-interface|
-  Variables		  |denops-popup-preview-variables|
-  Functions		  |denops-popup-preview-functions|
-  Highlight		  |denops-popup-preview-highlight|
-Options			|denops-popup-preview-options|
-Configuration		|denops-popup-preview-configuration|
-Example			|denops-popup-preview-example|
-
-==============================================================================
-INTRODUCTION					*denops-popup-preview-introduction*
-
-*denops-popup-preview* shows completion documentation. This works in both Vim
-and Neovim with other plugins such as vim-lsp, nvim-lsp, ultisnips and so on.
+Introduction		|denops-signature-help-introduction|
+Usage			|denops-signature-help-usage|
+Install			|denops-signature-help-install|
+Interface		|denops-signature-help-interface|
+  Variables		  |denops-signature-help-variables|
+  Functions		  |denops-signature-help-functions|
+  Highlight		  |denops-signature-help-highlight|
+Options			|denops-signature-help-options|
+Configuration		|denops-signature-help-configuration|
+Example			|denops-signature-help-example|
 
 ==============================================================================
-USAGE						*denops-popup-preview-usage*
+INTRODUCTION					*denops-signature-help-introduction*
+
+*denops-signature-help* shows signature help from lsp server (nvim-lsp and 
+vim-lsp). This works in both Vim and Neovim.
+
+==============================================================================
+USAGE						*denops-signature-help-usage*
 
 You need to start manually.
 >
-	call popup_preview#enable()
+	call signature_help#enable()
 >
 
 ==============================================================================
-INSTALL						*denops-popup-preview-install*
+INSTALL						*denops-signature-help-install*
 
 Use your favorite plugin manager.
 
 ==============================================================================
-INTERFACE					*denops-popup-preview-interface*
+INTERFACE					*denops-signature-help-interface*
 
 ------------------------------------------------------------------------------
-FUNCTIONS 					*denops-popup-preview-functions*
+FUNCTIONS 					*denops-signature-help-functions*
 
-popup_preview#enable()			*popup_preview#enable()*
-		Enables |denops-popup-preview|.
+signature_help#enable()			*signature_help#enable()*
+		Enables |denops-signature-help|.
 
-popup_preview#disable()			*popup_preview#disable()*
-		Disables |denops-popup-preview|.
+signature_help#disable()			*signature_help#disable()*
+		Disables |denops-signature-help|.
 
-popup_preview#is_enabled()			*popup_preview#is_enabled()*
-		Returns weather |denops-popup-preview| plugin is enabled.  This
-		function returns 1 if |denops-popup-preview| is enabled, zero
+signature_help#is_enabled()			*signature_help#is_enabled()*
+		Returns weather |denops-signature-help| plugin is enabled.  This
+		function returns 1 if |denops-signature-help| is enabled, zero
 		otherwise.
 
-popup_preview#scroll({count})			*popup_preview#scroll()*
+signature_help#scroll({count})			*signature_help#scroll()*
 		Scroll floating window with {count}.
 
 		Example: >
-		inoremap <buffer> <expr><c-f> popup_preview#scroll(+4)
-		inoremap <buffer> <expr><c-d> popup_preview#scroll(-4)
+		inoremap <buffer> <expr><c-f> signature_help#scroll(+4)
+		inoremap <buffer> <expr><c-d> signature_help#scroll(-4)
 
 ------------------------------------------------------------------------------
-HIGHLIGHTS 					*denops-popup-preview-highlights*
+HIGHLIGHTS 					*denops-signature-help-highlights*
 
 These are Neovim only
 
-PopupPreviewDocument			*hi-PopupPreviewDocument*
+SignatureHelpDocument			*hl-SignatureHelpDocument*
 		A highlight used for background of floating window.
 		default: links to |hl-NormalFloat|
 
-PopupPreviewBorder			*hi-PopupPreviewBorder*
+SignatureHelpBorder			*hl-SignatureHelpBorder*
 		A highlight used for border of floating window.
 		default: links to FloatBorder
 
 ==============================================================================
-OPTIONS						*denops-popup-preview-options*
+OPTIONS						*denops-signature-help-options*
 
-You can customize |denops-popup-preview| with global variable 
-|g:popup_preview_config|. 
-|g:popup_preview_config| is a dictionary which has the following keys.
+You can customize |denops-signature-help| with global variable 
+|g:signature_help_config|. 
+|g:signature_help_config| is a dictionary which has the following keys.
 
-border					*denops-popup-preview-option-border*
+border					*denops-signature-help-option-border*
 		If it is true, border of floating window is shown.
 		(default: v:true)
 
-maxWidth				*denops-popup-preview-option-maxWidth*
+maxWidth				*denops-signature-help-option-maxWidth*
 		Max width of floating window.
 		(default: 80)
 
-maxHeight				*denops-popup-preview-option-maxHeight*
+maxHeight			       *denops-signature-help-option-maxHeight*
 		Max height of floating window.
 		(default: 30)
 
-winblend				*denops-popup-preview-option-winblend*
+winblend				*denops-signature-help-option-winblend*
 		'winblend' of the floating window
 		(Only in Neovim)
 		(default: 'winblend')
 
-supportVsnip				*denops-popup-preview-option-supporVsnip*
-		If it is true, vsnip's snippets preview is shown.
-		(default: v:true)
+style					*denops-signature-help-option-style*
+		Signature help style.
 
-supportUltisnips 		*denops-popup-preview-option-supporUltisnips*
-		If it is true, ultisnips' snippets preview is shown.
-		(default: v:true)
-
-supportInfo				*denops-popup-preview-option-supportInfo*
-		If it is true, preview of "info" field of |complete-items| is
-		enabled.
-		(default: v:true)
-
-delay					*denops-popup-preview-option-delay*
-    		Time in milliseconds to delay the completion documentation
-		popup. If you feel slow, specify large value.
-		Set 0 to disable debouncing.
-		(default: 30)
+		"full": Show all information from lsp server.
+		"labelOnly": Show only label. Documentation is omitted.
+		"currentLabelOnly": Show only current parameter. This is the 
+				    minimal style.
 
 ==============================================================================
-EXAMPLE					*denops-popup-preview-example*
+EXAMPLE					*denops-signature-help-example*
 >
-	let g:popup_preview_config = {
+	let g:signature_help_config = {
 	      \ 'maxWidth': 60,
 	      \ 'maxHeight': 30,
 	      \ }
