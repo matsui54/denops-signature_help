@@ -120,6 +120,16 @@ export class SigHandler {
     return labelIdx - input.length;
   }
 
+  async showVirtualText(
+    denops: Denops,
+    line: string,
+  ): Promise<void> {
+    await denops.call(
+      "signature_help#doc#show_virtual_text",
+      { line: line },
+    );
+  }
+
   async showSignatureHelp(
     denops: Denops,
     help: SignatureHelp,
@@ -137,6 +147,11 @@ export class SigHandler {
     // if allow select mode, vsnip's jump becomes unavailable
     if (!lines?.length || !mode.startsWith("i")) {
       this.closeWin(denops);
+      return;
+    }
+
+    if (config.style == "virtual") {
+      this.showVirtualText(denops, lines[0]);
       return;
     }
 

@@ -1,4 +1,9 @@
-export type signatureStyle = "labelOnly" | "currentLabelOnly" | "full";
+export type signatureStyle =
+  | "labelOnly"
+  | "currentLabelOnly"
+  | "full"
+  | "virtual";
+
 export type Config = {
   border: boolean;
   maxWidth: number;

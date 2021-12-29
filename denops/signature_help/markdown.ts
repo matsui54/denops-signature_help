@@ -71,6 +71,20 @@ export function convertSignatureHelpToMarkdownLines(
   if (signature.parameters?.length) {
     const activeParameter = signature.activeParameter ||
       signatureHelp.activeParameter || 0;
+    if (style == "virtual") {
+      let params: string[] = [];
+      for (let i = activeParameter; i < signature.parameters.length; i++) {
+        const label = signature.parameters[i];
+        if (typeof label.label == "string") {
+          params = params.concat(label.label);
+        } else {
+          params = params.concat(
+            signature.label.slice(...label.label).split("\n"),
+          );
+        }
+      }
+      return [[params.join(", ")], null];
+    }
 
     const parameter = signature.parameters[activeParameter];
     if (parameter) {

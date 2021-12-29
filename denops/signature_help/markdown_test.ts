@@ -152,6 +152,10 @@ Deno.test("convertSignatureHelpToMarkdownLines", () => {
     convertSignatureHelpToMarkdownLines(resultCcls, "", [","], "full"),
     [["func(int a, int b, int c) -> int", "three args"], [5, 10]],
   );
+  assertEquals(
+    convertSignatureHelpToMarkdownLines(resultCcls, "", [","], "virtual"),
+    [["int a, int b, int c"], null],
+  );
   resultCcls.activeParameter = 2;
   assertEquals(
     convertSignatureHelpToMarkdownLines(resultCcls, "c", [","], "full"),
@@ -174,6 +178,10 @@ Deno.test("convertSignatureHelpToMarkdownLines", () => {
       [","],
       "currentLabelOnly",
     ),
+    [["int c"], null],
+  );
+  assertEquals(
+    convertSignatureHelpToMarkdownLines(resultCcls, "", [","], "virtual"),
     [["int c"], null],
   );
   assertEquals(
