@@ -8,7 +8,7 @@ export async function getServerCapabilities(
 ): Promise<ServerCapabilities | null> {
   if (await fn.exists(denops, "*lsp#get_allowed_servers")) {
     const servers = await denops.call("lsp#get_allowed_servers") as string[];
-    if (servers) {
+    if (servers.length) {
       lspType = "vimlsp";
       return denops.call(
         "lsp#get_server_capabilities",
