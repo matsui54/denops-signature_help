@@ -2,6 +2,7 @@
 Show signature help from lsp server.
 
 ## TODO
-- [ ] vim-lsp support
-- [ ] Vim support
-- [ ] add toggle mapping
+- add toggle mapping
+- support Neovim virtual text
+- support multiple label support
+- show labels by popup in Vim like virtual text
