@@ -99,10 +99,14 @@ winblend				*denops-signature-help-option-winblend*
 style					*denops-signature-help-option-style*
 		Signature help style.
 
-		"full": Show all information from lsp server.
-		"labelOnly": Show only label. Documentation is omitted.
-		"currentLabelOnly": Show only current parameter. This is the 
-				    minimal style.
+		"full":		Show all information from lsp server.
+		"labelOnly":	Show only label. Documentation is omitted.
+		"currentLabelOnly":	Show only current parameter. This is 
+					the minimal style.
+		"virtual":	Show remaining labels in virtual text UI.
+				It works in both Vim and Neovim.
+				In Vim, popup window is used.
+				In Neovim, |nvim_buf_set_extmark()| is used.
 
 ==============================================================================
 EXAMPLE					*denops-signature-help-example*
