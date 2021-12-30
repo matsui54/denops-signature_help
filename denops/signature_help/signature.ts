@@ -136,7 +136,7 @@ export class SigHandler {
           lines: [line],
           floatOpt: {
             row: await fn.screenrow(denops) as number,
-            col: await fn.screencol(denops) as number + 2,
+            col: (await fn.getline(denops, ".") as string).length + 5,
             border: false,
           },
           events: ["InsertLeave", "CursorMoved"],

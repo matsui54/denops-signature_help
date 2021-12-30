@@ -70,7 +70,7 @@ endfunction
 function! signature_help#doc#update_virtual_text() abort
   if s:win.is_visible()
     let id = s:win.get_winid()
-    call popup_setoptions(id, {'col': screencol() + 2})
+    call popup_setoptions(id, {'col': len(getline('.')) + 5})
   endif
 endfunction
 
