@@ -124,10 +124,27 @@ export class SigHandler {
     denops: Denops,
     line: string,
   ): Promise<void> {
-    await denops.call(
-      "signature_help#doc#show_virtual_text",
-      { line: line },
-    );
+    if (await fn.has(denops, "nvim")) {
+      await denops.call(
+        "signature_help#doc#show_virtual_text",
+        { line: line },
+      );
+    } else {
+      await denops.call(
+        "signature_help#doc#show_floating",
+        {
+          lines: [line],
+          floatOpt: {
+            row: await fn.screenrow(denops) as number,
+            col: await fn.screencol(denops) as number + 2,
+            border: false,
+          },
+          events: ["InsertLeave", "CursorMoved"],
+          width: line.length,
+          height: 1,
+        },
+      ) as number;
+    }
   }
 
   async showSignatureHelp(

@@ -67,6 +67,13 @@ function! signature_help#doc#change_highlight(opts) abort
   endif
 endfunction
 
+function! signature_help#doc#update_virtual_text() abort
+  if s:win.is_visible()
+    let id = s:win.get_winid()
+    call popup_setoptions(id, {'col': screencol() + 2})
+  endif
+endfunction
+
 function! signature_help#doc#show_virtual_text(opts) abort
   if !exists('*nvim_buf_set_extmark')
     return
@@ -94,6 +101,7 @@ endfunction
 " cmds: string[]
 " syntax: string
 " hl?: [number, number]
+" lines: string[]
 function! signature_help#doc#show_floating(opts) abort
   if getcmdwintype() !=# ''
     call s:win.close()
@@ -119,7 +127,9 @@ function! signature_help#doc#show_floating(opts) abort
       call s:win.set_var('&winblend', opts.winblend)
     endif
   endif
-  call signature_help#doc#change_highlight(opts)
+  if has_key(opts, 'hl') && len(opts.hl)
+    call signature_help#doc#change_highlight(opts)
+  endif
   if len(opts.events)
     execute printf("autocmd %s <buffer> ++once call signature_help#doc#close_floating({})",
           \ join(opts.events, ','))
