@@ -408,13 +408,13 @@ export async function getStylizeCommands(
   let last = 1;
   for (const hi of hiContents.highlights) {
     if (last < hi.start) {
-      applySyntax("popup_preview_markdown", last, hi.start - 1);
+      applySyntax("signaturehelp_markdown", last, hi.start - 1);
     }
     applySyntax(hi.ft, hi.start, hi.finish);
     last = hi.finish + 1;
   }
   if (last < hiContents.stripped.length) {
-    applySyntax("popup_preview_markdown", last, hiContents.stripped.length);
+    applySyntax("signaturehelp_markdown", last, hiContents.stripped.length);
   }
   return {
     stripped: hiContents.stripped,

@@ -205,6 +205,8 @@ export class SigHandler {
       row: screenrow - hiCtx.height - (config.border ? 2 : 0),
       col: col + (await fn.screencol(denops) as number),
       border: config.border,
+      height: hiCtx.height,
+      width: hiCtx.width,
     };
 
     await denops.call(
@@ -213,8 +215,6 @@ export class SigHandler {
         lines: hiCtx.stripped,
         floatOpt: floatingOpt,
         events: ["InsertLeave", "CursorMoved"],
-        width: hiCtx.width,
-        height: hiCtx.height,
         syntax: "markdown",
         winblend: config.winblend,
         cmds: hiCtx.commands,

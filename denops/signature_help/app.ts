@@ -47,16 +47,16 @@ export async function main(denops: Denops) {
   registerAutocmd(denops);
 
   const [hldoc, hlborder] = await gather(denops, async (denops) => {
-    await fn.hlexists(denops, "PopupPreviewDocument");
-    await fn.hlexists(denops, "PopupPreviewBorder");
+    await fn.hlexists(denops, "SignatureHelpDocument");
+    await fn.hlexists(denops, "SignatureHelpBorder");
   }) as [boolean, boolean];
   await batch(denops, async (denops) => {
     await vars.g.set(denops, "signature_help#_initialized", 1);
     if (!hldoc) {
-      await denops.cmd("highlight link PopupPreviewDocument NormalFloat");
+      await denops.cmd("highlight link SignatureHelpDocument NormalFloat");
     }
     if (!hlborder) {
-      await denops.cmd("highlight link PopupPreviewBorder NormalFloat");
+      await denops.cmd("highlight link SignatureHelpBorder NormalFloat");
     }
   });
 }

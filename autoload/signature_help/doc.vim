@@ -96,8 +96,6 @@ endfunction
 
 " floatOpt: FloatOption;
 " events: autocmd.AutocmdEvent[];
-" width: number;
-" height: number;
 " cmds: string[]
 " syntax: string
 " hl?: [number, number]
@@ -112,8 +110,6 @@ function! signature_help#doc#show_floating(opts) abort
   call signature_help#doc#set_buffer(opts)
 
   let win_opts = opts.floatOpt
-  let win_opts.width = opts.width
-  let win_opts.height = opts.height
 
   call s:win.open(win_opts)
   " call s:Window.do(s:win.get_winid(), { -> s:apply_syntax(opts) })
@@ -122,7 +118,8 @@ function! signature_help#doc#show_floating(opts) abort
   endif
 
   if has('nvim')
-    call s:win.set_var('&winhighlight', 'NormalFloat:PopupPreviewDocument,FloatBorder:PopupPreviewBorder')
+    call s:win.set_var('&winhighlight', 
+          \ 'NormalFloat:SignatureHelpDocument,FloatBorder:SignatureHelpBorder')
     if opts.winblend
       call s:win.set_var('&winblend', opts.winblend)
     endif
