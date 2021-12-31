@@ -138,10 +138,10 @@ export class SigHandler {
             row: await fn.screenrow(denops) as number,
             col: (await fn.getline(denops, ".") as string).length + 5,
             border: false,
+            width: line.length,
+            height: 1,
           },
           events: ["InsertLeave", "CursorMoved"],
-          width: line.length,
-          height: 1,
         },
       ) as number;
     }
