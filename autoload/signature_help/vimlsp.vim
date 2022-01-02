@@ -1,5 +1,6 @@
 function s:respond(data) abort
   if lsp#client#is_error(a:data) || !has_key(a:data, 'response') || !has_key(a:data['response'], 'result')
+    call signature_help#doc#close_floating({})
     return
   endif
 
@@ -9,6 +10,7 @@ function signature_help#vimlsp#request_signature_help() abort
   let servers = filter(lsp#get_allowed_servers(), 'lsp#capabilities#has_signature_help_provider(v:val)')
 
   if len(servers) == 0
+    call signature_help#doc#close_floating({})
     return
   endif
 

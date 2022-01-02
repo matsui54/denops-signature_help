@@ -20,10 +20,12 @@ endfunction
 
 function! signature_help#doc#close_floating(opts) abort
   call s:win.close()
-  if !exists('s:ns_v')
-    let s:ns_v = nvim_create_namespace('dps_signature_help_v')
+  if has('nvim')
+    if !exists('s:ns_v')
+      let s:ns_v = nvim_create_namespace('dps_signature_help_v')
+    endif
+    call nvim_buf_clear_namespace(0, s:ns_v, 0, -1)
   endif
-  call nvim_buf_clear_namespace(0, s:ns_v, 0, -1)
 endfunction
 
 function! signature_help#doc#get_winid() abort
