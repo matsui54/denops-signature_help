@@ -12,6 +12,10 @@ export async function main(denops: Denops) {
 
     async onEvent(arg1: unknown): Promise<void> {
       const event = arg1 as autocmd.AutocmdEvent;
+      if (event == "ColorScheme") {
+        await initializeHighlight(denops);
+        return;
+      }
       await handler.onEvent(denops, event);
     },
 
@@ -43,20 +47,30 @@ export async function main(denops: Denops) {
     );
   }
 
-  await handler.getConfig(denops);
-  registerAutocmd(denops);
+  async function initializeHighlight(denops: Denops): Promise<void> {
+    await batch(denops, async (denops) => {
+      await denops.cmd(
+        "highlight default link SignatureHelpDocument NormalFloat",
+      );
+      await denops.cmd("highlight default link SignatureHelpBorder NormalFloat");
+      await denops.cmd("highlight default link SignatureHelpVirtual Error");
+    });
+  }
 
-  const [hldoc, hlborder] = await gather(denops, async (denops) => {
-    await fn.hlexists(denops, "SignatureHelpDocument");
-    await fn.hlexists(denops, "SignatureHelpBorder");
-  }) as [boolean, boolean];
-  await batch(denops, async (denops) => {
-    await vars.g.set(denops, "signature_help#_initialized", 1);
-    if (!hldoc) {
-      await denops.cmd("highlight link SignatureHelpDocument NormalFloat");
-    }
-    if (!hlborder) {
-      await denops.cmd("highlight link SignatureHelpBorder NormalFloat");
-    }
-  });
+  await handler.getConfig(denops);
+  await registerAutocmd(denops);
+  await initializeHighlight(denops);
+
+  await autocmd.group(
+    denops,
+    "SignatureHelp-hl",
+    (helper: autocmd.GroupHelper) => {
+      helper.remove("*");
+      helper.define(
+        "ColorScheme",
+        "*",
+        `call signature_help#notify('onEvent', ["ColorScheme"])`,
+      );
+    },
+  );
 }

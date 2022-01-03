@@ -72,6 +72,10 @@ SignatureHelpBorder			*hl-SignatureHelpBorder*
 		A highlight used for border of floating window.
 		default: links to FloatBorder
 
+SignatureHelpVirtualtext			*hl-SignatureHelpVirtualtext*
+		A highlight used for virtual text.
+		default: links to Error.
+
 ==============================================================================
 OPTIONS						*denops-signature_help-options*
 

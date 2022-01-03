@@ -93,7 +93,7 @@ function! signature_help#doc#show_virtual_text(opts) abort
 
   call nvim_buf_set_extmark(
         \ 0, s:ns_v, line('.')-1, col('.')-1, {
-        \ 'virt_text': [[a:opts.line, "Error"]],
+        \ 'virt_text': [[a:opts.line, "SignatureHelpVirtual"]],
         \ 'hl_mode': 'combine',
         \ 'priority': 100,
         \ })
