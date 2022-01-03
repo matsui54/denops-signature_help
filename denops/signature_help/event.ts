@@ -40,6 +40,12 @@ export class EventHandler {
       allTriggerChars.includes(line[cursorCol - 2])
     ) {
       this.sigHandler.requestSighelp(denops, triggerCharacters);
+    } else if (this.config.onTriggerChar) {
+      if (
+        !allTriggerChars.includes(line.slice(0, cursorCol - 1).trim().slice(-1))
+      ) {
+        this.sigHandler.closeWin(denops);
+      }
     } else if (this.config.style == "virtual") {
       if (!(await fn.has(denops, "nvim"))) {
         await denops.call("signature_help#doc#update_virtual_text");

@@ -173,12 +173,14 @@ export class SigHandler {
     }
 
     if (this.isSameSignature(help)) {
-      if (this.isSamePosition(help)) {
-        return;
-      } else if (config.style != "currentLabelOnly") {
-        this.changeHighlight(denops, hl);
-        this.prevItem = help;
-        return;
+      if (!config.onTriggerChar) {
+        if (this.isSamePosition(help)) {
+          return;
+        } else if (config.style != "currentLabelOnly") {
+          this.changeHighlight(denops, hl);
+          this.prevItem = help;
+          return;
+        }
       }
     }
     this.prevItem = help;

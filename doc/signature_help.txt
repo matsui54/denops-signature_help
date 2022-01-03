@@ -1,29 +1,29 @@
-*denops-signature-help.txt*		Show signature help from lsp server
+*denops-signature_help.txt*		Show signature help from lsp server
 
 Author : matsui54 <haru.matu9168@gmail.com>
 License: MIT license
 
-CONTENTS					*denops-signature-help-contents*
+CONTENTS					*denops-signature_help-contents*
 
-Introduction		|denops-signature-help-introduction|
-Usage			|denops-signature-help-usage|
-Install			|denops-signature-help-install|
-Interface		|denops-signature-help-interface|
-  Variables		  |denops-signature-help-variables|
-  Functions		  |denops-signature-help-functions|
-  Highlight		  |denops-signature-help-highlight|
-Options			|denops-signature-help-options|
-Configuration		|denops-signature-help-configuration|
-Example			|denops-signature-help-example|
+Introduction		|denops-signature_help-introduction|
+Usage			|denops-signature_help-usage|
+Install			|denops-signature_help-install|
+Interface		|denops-signature_help-interface|
+  Variables		  |denops-signature_help-variables|
+  Functions		  |denops-signature_help-functions|
+  Highlight		  |denops-signature_help-highlight|
+Options			|denops-signature_help-options|
+Configuration		|denops-signature_help-configuration|
+Example			|denops-signature_help-example|
 
 ==============================================================================
-INTRODUCTION					*denops-signature-help-introduction*
+INTRODUCTION					*denops-signature_help-introduction*
 
-*denops-signature-help* shows signature help from lsp server (nvim-lsp and 
+*denops-signature_help* shows signature help from lsp server (nvim-lsp and 
 vim-lsp). This works in both Vim and Neovim.
 
 ==============================================================================
-USAGE						*denops-signature-help-usage*
+USAGE						*denops-signature_help-usage*
 
 You need to start manually.
 >
@@ -31,25 +31,25 @@ You need to start manually.
 >
 
 ==============================================================================
-INSTALL						*denops-signature-help-install*
+INSTALL						*denops-signature_help-install*
 
 Use your favorite plugin manager.
 
 ==============================================================================
-INTERFACE					*denops-signature-help-interface*
+INTERFACE					*denops-signature_help-interface*
 
 ------------------------------------------------------------------------------
-FUNCTIONS 					*denops-signature-help-functions*
+FUNCTIONS 					*denops-signature_help-functions*
 
 signature_help#enable()			*signature_help#enable()*
-		Enables |denops-signature-help|.
+		Enables |denops-signature_help|.
 
 signature_help#disable()			*signature_help#disable()*
-		Disables |denops-signature-help|.
+		Disables |denops-signature_help|.
 
 signature_help#is_enabled()			*signature_help#is_enabled()*
-		Returns weather |denops-signature-help| plugin is enabled.  This
-		function returns 1 if |denops-signature-help| is enabled, zero
+		Returns weather |denops-signature_help| plugin is enabled.  This
+		function returns 1 if |denops-signature_help| is enabled, zero
 		otherwise.
 
 signature_help#scroll({count})			*signature_help#scroll()*
@@ -60,7 +60,7 @@ signature_help#scroll({count})			*signature_help#scroll()*
 		inoremap <buffer> <expr><c-d> signature_help#scroll(-4)
 
 ------------------------------------------------------------------------------
-HIGHLIGHTS 					*denops-signature-help-highlights*
+HIGHLIGHTS 					*denops-signature_help-highlights*
 
 These are Neovim only
 
@@ -73,30 +73,30 @@ SignatureHelpBorder			*hl-SignatureHelpBorder*
 		default: links to FloatBorder
 
 ==============================================================================
-OPTIONS						*denops-signature-help-options*
+OPTIONS						*denops-signature_help-options*
 
-You can customize |denops-signature-help| with global variable 
+You can customize |denops-signature_help| with global variable 
 |g:signature_help_config|. 
 |g:signature_help_config| is a dictionary which has the following keys.
 
-border					*denops-signature-help-option-border*
+border					*denops-signature_help-option-border*
 		If it is true, border of floating window is shown.
 		(default: v:true)
 
-maxWidth				*denops-signature-help-option-maxWidth*
+maxWidth				*denops-signature_help-option-maxWidth*
 		Max width of floating window.
 		(default: 80)
 
-maxHeight			       *denops-signature-help-option-maxHeight*
+maxHeight			       *denops-signature_help-option-maxHeight*
 		Max height of floating window.
 		(default: 30)
 
-winblend				*denops-signature-help-option-winblend*
+winblend				*denops-signature_help-option-winblend*
 		'winblend' of the floating window
 		(Only in Neovim)
 		(default: 'winblend')
 
-style					*denops-signature-help-option-style*
+style					*denops-signature_help-option-style*
 		Signature help style.
 
 		"full":		Show all information from lsp server.
@@ -107,13 +107,23 @@ style					*denops-signature-help-option-style*
 				It works in both Vim and Neovim.
 				In Vim, popup window is used.
 				In Neovim, |nvim_buf_set_extmark()| is used.
+		(default: "full")
+
+onTriggerChar 			*denops-signature_help-option-onTriggerChar*
+		If it is true, signature help window (or virtual text) is
+		shown only when trigger character (like "(" and ",") is typed.
+		(default: v:false)
 
 ==============================================================================
-EXAMPLE					*denops-signature-help-example*
+EXAMPLE					*denops-signature_help-example*
+This is the default config.
 >
 	let g:signature_help_config = {
-	      \ 'maxWidth': 60,
+	      \ 'border': v:true,
+	      \ 'maxWidth': 80,
 	      \ 'maxHeight': 30,
+	      \ 'style': "full",
+	      \ 'onTriggerChar': v:false,
 	      \ }
 >
 ==============================================================================

@@ -9,8 +9,9 @@ export type Config = {
   maxWidth: number;
   maxHeight: number;
   winblend?: number;
-  delay: number;
+  delay: number; // not implemented yet
   style: signatureStyle;
+  onTriggerChar: boolean;
 };
 
 export function getDefaultDocConfig(): Config {
@@ -20,6 +21,7 @@ export function getDefaultDocConfig(): Config {
     maxHeight: 30,
     delay: 50,
     style: "full",
+    onTriggerChar: false,
   };
 }
 
