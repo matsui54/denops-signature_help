@@ -75,7 +75,7 @@ SignatureHelpBorder			*hl-SignatureHelpBorder*
 		A highlight used for border of floating window.
 		default: links to FloatBorder
 
-SignatureHelpVirtualtext			*hl-SignatureHelpVirtualtext*
+SignatureHelpVirtual    			*hl-SignatureHelpVirtual*
 		A highlight used for virtual text.
 		default: links to Error.
 
