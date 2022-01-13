@@ -142,6 +142,20 @@ Deno.test("convertSignatureHelpToMarkdownLines", () => {
     convertSignatureHelpToMarkdownLines(resultCcls, "", [","], "full"),
     [["func() -> int", "no args s1"], [0, 0]],
   );
+  assertEquals(
+    convertSignatureHelpToMarkdownLines(resultCcls, "c", [","], "full", true),
+    [[
+      "```c",
+      "func() -> int",
+      "func(int a) -> int",
+      "func(int &a) -> int",
+      "func(int *a) -> int",
+      "func(int a, int b) -> int",
+      "func(int a, int b, int c) -> int",
+      "```",
+      "no args s1",
+    ], [0, 0]],
+  );
   resultCcls.activeSignature = 1;
   assertEquals(
     convertSignatureHelpToMarkdownLines(resultCcls, "", [","], "full"),

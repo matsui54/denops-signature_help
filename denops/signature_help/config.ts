@@ -12,6 +12,7 @@ export type Config = {
   delay: number; // not implemented yet
   style: signatureStyle;
   onTriggerChar: boolean;
+  multiLabel: boolean;
 };
 
 export function getDefaultDocConfig(): Config {
@@ -22,6 +23,7 @@ export function getDefaultDocConfig(): Config {
     delay: 50,
     style: "full",
     onTriggerChar: false,
+    multiLabel: false,
   };
 }
 

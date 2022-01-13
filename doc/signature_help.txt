@@ -121,6 +121,13 @@ onTriggerChar 			*denops-signature_help-option-onTriggerChar*
 		shown only when trigger character (like "(" and ",") is typed.
 		(default: v:false)
 
+multiLabel 			*denops-signature_help-option-multiLabel*
+		If it is true, all labels are shown when there are multiple
+		labels.
+		This option is only available when 
+		|denops-signature_help-option-style| is "full" or "labelOnly".
+		(default: v:false)
+
 ==============================================================================
 EXAMPLE					*denops-signature_help-example*
 This is the default config.
@@ -131,6 +138,7 @@ This is the default config.
 	      \ 'maxHeight': 30,
 	      \ 'style': "full",
 	      \ 'onTriggerChar': v:false,
+	      \ 'multiLabel': v:false,
 	      \ }
 >
 ==============================================================================
