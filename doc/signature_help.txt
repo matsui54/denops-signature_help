@@ -80,7 +80,7 @@ SignatureHelpVirtual    			*hl-SignatureHelpVirtual*
 		default: links to Error.
 
 Additionally, you can configure highlight of the active parameter in the
-signature help via |hi-LspSignatureActiveParameter|.
+signature help via |hl-LspSignatureActiveParameter|.
 ==============================================================================
 OPTIONS						*denops-signature_help-options*
 
