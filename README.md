@@ -48,5 +48,5 @@ let g:lsp_signature_help_enabled = 0
 ```
 
 ## TODO
-- add toggle mapping
-- support multiple label support
+- [ ] add toggle mapping
+- [x] support multiple label support
