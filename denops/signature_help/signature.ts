@@ -7,25 +7,6 @@ import {
   getStylizeCommands,
 } from "./markdown.ts";
 
-export function trimLines(lines: string[] | undefined): string[] {
-  if (!lines) return [];
-  let start = 0;
-  let end = 0;
-  for (let i = 0; i < lines.length; i++) {
-    if (lines[i].trim().length) {
-      start = i;
-      break;
-    }
-  }
-  for (let i = lines.length - 1; i >= 0; i--) {
-    if (lines[i].trim().length) {
-      end = i + 1;
-      break;
-    }
-  }
-  return lines.slice(start, end);
-}
-
 export function findLabel(line: string, name: string, trigger: string): number {
   const pairs = {
     "(": ")",
@@ -157,7 +138,7 @@ export class SigHandler {
       await op.filetype.getLocal(denops),
       this.triggers,
       config.style,
-      config.multiLabel
+      config.multiLabel,
     );
     if (!maybe) return;
     const [lines, hl] = maybe;

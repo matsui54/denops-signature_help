@@ -9,6 +9,25 @@ export type MarkupContent = {
   value: string;
 };
 
+export function trimLines(lines: string[] | undefined): string[] {
+  if (!lines) return [];
+  let start = 0;
+  let end = 0;
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].trim().length) {
+      start = i;
+      break;
+    }
+  }
+  for (let i = lines.length - 1; i >= 0; i--) {
+    if (lines[i].trim().length) {
+      end = i + 1;
+      break;
+    }
+  }
+  return lines.slice(start, end);
+}
+
 // --- Converts any of `MarkedString` | `MarkedString[]` | `MarkupContent` into
 // --- a list of lines containing valid markdown. Useful to populate the hover
 // --- window for `textDocument/hover`, for parsing the result of
@@ -150,6 +169,7 @@ export function convertSignatureHelpToMarkdownLines(
   if (style == "labelOnly") {
     return [labels, activeHl];
   }
+  contents = trimLines(contents);
   return [contents, activeHl];
 }
 
