@@ -77,7 +77,10 @@ export function convertSignatureHelpToMarkdownLines(
 ): [string[], [number, number] | null] | null {
   if (!signatureHelp.signatures) return null;
   let activeHl: [number, number] = [0, 0];
-  const activeSignature = (signatureHelp.activeSignature || 0);
+  let activeSignature = (signatureHelp.activeSignature || 0);
+  if (activeSignature >= signatureHelp.signatures.length) {
+    activeSignature = 0;
+  }
   const signature = signatureHelp.signatures[activeSignature];
   if (!signature) return null;
 
@@ -98,8 +101,11 @@ export function convertSignatureHelpToMarkdownLines(
     contents = convertInputToMarkdownLines(signature.documentation, contents);
   }
   if (signature.parameters?.length) {
-    const activeParameter = signature.activeParameter ||
+    let activeParameter = signature.activeParameter ||
       signatureHelp.activeParameter || 0;
+    if (activeParameter >=signature.parameters.length) {
+      activeParameter = 0;
+    }
     if (style == "virtual") {
       let params: string[] = [];
       for (let i = activeParameter; i < signature.parameters.length; i++) {
