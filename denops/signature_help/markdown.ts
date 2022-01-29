@@ -1,6 +1,6 @@
 import { Denops, fn, gather, vars } from "./deps.ts";
 import { SignatureHelp } from "./types.ts";
-import { signatureStyle } from "./config.ts";
+import { contentsStyle } from "./config.ts";
 
 type MarkedString = string | { language: string; value: string };
 export type MarkupKind = "plaintext" | "markdown";
@@ -72,7 +72,7 @@ export function convertSignatureHelpToMarkdownLines(
   signatureHelp: SignatureHelp,
   ft: string,
   triggers: string[],
-  style: signatureStyle,
+  style: contentsStyle,
   multiLabel = false,
 ): [string[], [number, number] | null] | null {
   if (!signatureHelp.signatures) return null;
@@ -108,7 +108,7 @@ export function convertSignatureHelpToMarkdownLines(
     if (activeParameter < 0 || activeParameter >= signature.parameters.length) {
       activeParameter = 0;
     }
-    if (style == "virtual") {
+    if (style == "remaining") {
       let params: string[] = [];
       for (let i = activeParameter; i < signature.parameters.length; i++) {
         const label = signature.parameters[i];

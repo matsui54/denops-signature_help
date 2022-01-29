@@ -101,6 +101,20 @@ export class SigHandler {
     return labelIdx - input.length;
   }
 
+  async showGhostText(
+    denops: Denops,
+    lines: string[],
+  ): Promise<void> {
+    if (await fn.has(denops, "nvim")) {
+      await denops.call(
+        "signature_help#doc#show_ghost_text",
+        { lines: lines },
+      );
+    } else {
+      console.error("denops-signaturehelp doesn't support ghostText in Vim");
+    }
+  }
+
   async showVirtualText(
     denops: Denops,
     line: string,
@@ -137,7 +151,7 @@ export class SigHandler {
       help,
       await op.filetype.getLocal(denops),
       this.triggers,
-      config.style,
+      config.contentsStyle,
       config.multiLabel,
     );
     if (!maybe) return;
@@ -149,8 +163,11 @@ export class SigHandler {
       return;
     }
 
-    if (config.style == "virtual") {
+    if (config.viewStyle == "virtual") {
       this.showVirtualText(denops, lines[0]);
+      return;
+    } else if (config.viewStyle == "ghost") {
+      this.showGhostText(denops, lines);
       return;
     }
 
@@ -158,7 +175,10 @@ export class SigHandler {
       if (!config.onTriggerChar) {
         if (this.isSamePosition(help)) {
           return;
-        } else if (config.style != "currentLabelOnly") {
+        } else if (
+          config.contentsStyle != "currentLabelOnly" &&
+          config.contentsStyle != "remaining"
+        ) {
           this.changeHighlight(denops, hl);
           this.prevItem = help;
           return;
@@ -173,7 +193,8 @@ export class SigHandler {
       config.maxWidth,
     );
     const maxHeight = Math.min(screenrow - 1, config.maxHeight);
-    const col = config.style == "currentLabelOnly"
+    const col = (config.contentsStyle == "currentLabelOnly" ||
+        config.contentsStyle == "remaining")
       ? 0
       : await this.calcWinPos(denops, help);
 

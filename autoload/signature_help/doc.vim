@@ -100,6 +100,25 @@ function! signature_help#doc#show_virtual_text(opts) abort
   autocmd InsertLeave <buffer> ++once call nvim_buf_clear_namespace(0, s:ns_v, 0, -1)
 endfunction
 
+function! signature_help#doc#show_ghost_text(opts) abort
+  if !exists('*nvim_buf_set_extmark')
+    return
+  endif
+
+  if !exists('s:ns_v')
+    let s:ns_v = nvim_create_namespace('dps_signature_help_v')
+  endif
+
+  call nvim_buf_clear_namespace(0, s:ns_v, 0, -1)
+
+  call nvim_buf_set_extmark(
+        \ 0, s:ns_v, line('.')-1, col('.')-1, {
+        \ 'virt_lines': map(a:opts.lines, { _, l -> [[l, "Comment"]] }),
+        \ 'priority': 100,
+        \ })
+  autocmd InsertLeave <buffer> ++once call nvim_buf_clear_namespace(0, s:ns_v, 0, -1)
+endfunction
+
 " floatOpt: FloatOption;
 " events: autocmd.AutocmdEvent[];
 " cmds: string[]

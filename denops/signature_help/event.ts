@@ -1,6 +1,6 @@
 import { autocmd, Denops, fn, vars } from "./deps.ts";
 import { ServerCapabilities, SignatureHelp } from "./types.ts";
-import { Config, makeConfig } from "./config.ts";
+import { Config, makeConfig, UserConfig } from "./config.ts";
 import { SigHandler } from "./signature.ts";
 import { getServerCapabilities } from "./integ.ts";
 
@@ -46,7 +46,7 @@ export class EventHandler {
       ) {
         this.sigHandler.closeWin(denops);
       }
-    } else if (this.config.style == "virtual") {
+    } else if (this.config.viewStyle == "virtual") {
       if (!(await fn.has(denops, "nvim"))) {
         await denops.call("signature_help#doc#update_virtual_text");
       }
@@ -58,7 +58,7 @@ export class EventHandler {
       denops,
       "signature_help_config",
       {},
-    ) as Config;
+    ) as UserConfig;
     this.config = makeConfig(users);
   }
 
