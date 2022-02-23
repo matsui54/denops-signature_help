@@ -59,7 +59,6 @@ export class SigHandler {
   async closeWin(denops: Denops) {
     await denops.call(
       "signature_help#doc#close_floating",
-      {},
     );
   }
 
@@ -122,7 +121,6 @@ export class SigHandler {
             width: line.length,
             height: 1,
           },
-          events: ["InsertLeave", "CursorMoved"],
         },
       ) as number;
     }
@@ -198,7 +196,6 @@ export class SigHandler {
       {
         lines: hiCtx.stripped,
         floatOpt: floatingOpt,
-        events: ["InsertLeave", "CursorMoved"],
         syntax: "markdown",
         winblend: config.winblend,
         cmds: hiCtx.commands,

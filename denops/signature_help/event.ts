@@ -1,4 +1,4 @@
-import { autocmd, Denops, fn, vars } from "./deps.ts";
+import { Denops, fn, vars } from "./deps.ts";
 import { ServerCapabilities, SignatureHelp } from "./types.ts";
 import { Config, makeConfig } from "./config.ts";
 import { SigHandler } from "./signature.ts";
@@ -12,7 +12,16 @@ export class EventHandler {
   private sigHandler = new SigHandler();
   private capabilities: ServerCapabilities | null = null;
 
-  private async onInsertEnter(denops: Denops): Promise<void> {
+  private async getConfig(denops: Denops): Promise<void> {
+    const users = await vars.g.get(
+      denops,
+      "signature_help_config",
+      {},
+    ) as Config;
+    this.config = makeConfig(users);
+  }
+
+  async onInsertEnter(denops: Denops): Promise<void> {
     await this.getConfig(denops);
     this.sigHandler.onInsertEnter();
     this.capabilities = await getServerCapabilities(denops);
@@ -21,7 +30,10 @@ export class EventHandler {
     }
   }
 
-  private async onTextChanged(denops: Denops): Promise<void> {
+  async onTextChanged(denops: Denops): Promise<void> {
+    if (!this.capabilities) {
+      this.capabilities = await getServerCapabilities(denops);
+    }
     if (
       !this.capabilities || !this.capabilities.signatureHelpProvider
     ) {
@@ -49,28 +61,6 @@ export class EventHandler {
     } else if (this.config.style == "virtual") {
       if (!(await fn.has(denops, "nvim"))) {
         await denops.call("signature_help#doc#update_virtual_text");
-      }
-    }
-  }
-
-  async getConfig(denops: Denops): Promise<void> {
-    const users = await vars.g.get(
-      denops,
-      "signature_help_config",
-      {},
-    ) as Config;
-    this.config = makeConfig(users);
-  }
-
-  async onEvent(denops: Denops, event: autocmd.AutocmdEvent): Promise<void> {
-    if (event == "InsertEnter") {
-      this.onInsertEnter(denops);
-    } else {
-      if (!this.capabilities) {
-        this.capabilities = await getServerCapabilities(denops);
-      }
-      if (event == "TextChangedI" || event == "TextChangedP") {
-        this.onTextChanged(denops);
       }
     }
   }
