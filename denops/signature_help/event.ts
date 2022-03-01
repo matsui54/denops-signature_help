@@ -12,7 +12,7 @@ export class EventHandler {
   private sigHandler = new SigHandler();
   private capabilities: ServerCapabilities | null = null;
 
-  private async getConfig(denops: Denops): Promise<void> {
+  async getConfig(denops: Denops): Promise<void> {
     const users = await vars.g.get(
       denops,
       "signature_help_config",
