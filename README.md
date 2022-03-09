@@ -6,7 +6,7 @@ Shows signature help from lsp server.
 
 - works in both Vim and Neovim
 - support both [vim-lsp](https://github.com/prabirshrestha/vim-lsp) and
-  [ddc-nvim-lsp](https://github.com/Shougo/ddc-nvim-lsp)
+  Neovim builtin lsp.
 - support multiple styles of how to show signature help
 
 ## Screenshots
@@ -41,8 +41,7 @@ https://github.com/vim-denops/denops.vim
 
 ### lsp client
 
-- [vim-lsp](https://github.com/prabirshrestha/vim-lsp)
-- [ddc-nvim-lsp](https://github.com/Shougo/ddc-nvim-lsp)
+[vim-lsp](https://github.com/prabirshrestha/vim-lsp) or Neovim builtin lsp.
 
 ## Install
 
