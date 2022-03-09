@@ -1,5 +1,3 @@
-import { autocmd } from "./deps.ts";
-
 export type MarkupContent = {
   kind: MarkupKind;
   value: string;

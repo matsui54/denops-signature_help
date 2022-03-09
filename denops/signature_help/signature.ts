@@ -53,7 +53,7 @@ export class SigHandler {
 
   async requestSighelp(denops: Denops, triggers: string[]) {
     this.triggers = triggers;
-    requestSignatureHelp(denops);
+    await requestSignatureHelp(denops);
   }
 
   async closeWin(denops: Denops) {

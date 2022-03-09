@@ -1,9 +1,5 @@
 import { assertEquals } from "./deps.ts";
-import {
-  convertInputToMarkdownLines,
-  getHighlights,
-  getMarkdownFences,
-} from "./markdown.ts";
+import { convertInputToMarkdownLines, getMarkdownFences } from "./markdown.ts";
 import { convertSignatureHelpToMarkdownLines } from "./markdown.ts";
 import { SignatureHelp } from "./types.ts";
 

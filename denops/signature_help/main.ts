@@ -1,4 +1,4 @@
-import { autocmd, batch, Denops,  } from "./deps.ts";
+import { Denops } from "./deps.ts";
 import { EventHandler } from "./event.ts";
 import { SignatureHelp } from "./types.ts";
 
