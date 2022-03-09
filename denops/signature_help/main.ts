@@ -1,4 +1,4 @@
-import { autocmd, batch, Denops } from "./deps.ts";
+import { autocmd, batch, Denops,  } from "./deps.ts";
 import { EventHandler } from "./event.ts";
 import { SignatureHelp } from "./types.ts";
 
@@ -17,5 +17,4 @@ export function main(denops: Denops) {
       await handler.onSighelpResponce(denops, arg1 as SignatureHelp);
     },
   };
-  handler.getConfig(denops);
 }
