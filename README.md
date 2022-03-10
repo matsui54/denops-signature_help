@@ -5,8 +5,8 @@ Shows signature help from lsp server.
 ## Features
 
 - works in both Vim and Neovim
-- support both [vim-lsp](https://github.com/prabirshrestha/vim-lsp) and
-  Neovim builtin lsp.
+- support both [vim-lsp](https://github.com/prabirshrestha/vim-lsp) and Neovim
+  builtin lsp.
 - support multiple styles of how to show signature help
 
 ## Screenshots
