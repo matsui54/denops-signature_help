@@ -18,7 +18,7 @@ function! s:ensure_buffer() abort
   endif
 endfunction
 
-function! signature_help#doc#close_floating(opts) abort
+function! signature_help#doc#close_floating(...) abort
   call s:win.close()
   if has('nvim')
     if !exists('s:ns_v')
@@ -120,7 +120,6 @@ function! signature_help#doc#show_ghost_text(opts) abort
 endfunction
 
 " floatOpt: FloatOption;
-" events: autocmd.AutocmdEvent[];
 " cmds: string[]
 " syntax: string
 " hl?: [number, number]
@@ -151,10 +150,6 @@ function! signature_help#doc#show_floating(opts) abort
   endif
   if has_key(opts, 'hl') && len(opts.hl)
     call signature_help#doc#change_highlight(opts)
-  endif
-  if len(opts.events)
-    execute printf("autocmd %s <buffer> ++once call signature_help#doc#close_floating({})",
-          \ join(opts.events, ','))
   endif
   return s:win.get_winid()
 endfunction

@@ -18,7 +18,7 @@ local request_signature_help = function(arg)
     if res and not vim.tbl_isempty(res) and res.signatures and res.signatures[1] then
       respond(res)
     else
-      api.nvim_call_function("signature_help#doc#close_floating", {{}})
+      api.nvim_call_function("signature_help#doc#close_floating", {})
     end
   end)
 end

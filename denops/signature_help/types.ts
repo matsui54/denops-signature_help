@@ -1,5 +1,3 @@
-import { autocmd } from "./deps.ts";
-
 export type MarkupContent = {
   kind: MarkupKind;
   value: string;
@@ -133,7 +131,6 @@ export type OpenFloatOptions = {
   syntax: string;
   lines: string[];
   floatOpt: FloatOption;
-  events: autocmd.AutocmdEvent[];
   maxWidth: number;
   maxHeight: number;
   blend?: number;
