@@ -1,4 +1,4 @@
-# denops-signature.vim
+# denops-signature_help.vim
 
 Shows signature help from lsp server.
 
