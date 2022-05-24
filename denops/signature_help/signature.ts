@@ -1,4 +1,4 @@
-import { Denops, fn, op } from "./deps.ts";
+import { Denops, fn, op, vars } from "./deps.ts";
 import { FloatOption, SignatureHelp } from "./types.ts";
 import { Config } from "./config.ts";
 import { requestSignatureHelp } from "./integ.ts";
@@ -166,11 +166,22 @@ export class SigHandler {
     this.prevItem = help;
 
     const screenrow = await fn.screenrow(denops) as number;
+    const screenHeight = await vars.options.get(denops, "lines", 0);
     const maxWidth = Math.min(
       await op.columns.get(denops),
       config.maxWidth,
     );
-    const maxHeight = Math.min(screenrow - 1, config.maxHeight);
+    // If screenrow is too small, show signature help below the line.
+    const fallbackToBelow =
+      config.fallbackToBelow && screenrow - 1 <= (config.border ? 2 : 0);
+    const maxHeight = Math.min(
+      fallbackToBelow ? screenHeight - screenrow : screenrow - 1,
+      config.maxHeight
+    );
+    if (maxHeight <= (config.border ? 2 : 0)) {
+      // The screen is too small, give up to show floating window.
+      return;
+    }
     const col = config.style == "currentLabelOnly"
       ? 0
       : await this.calcWinPos(denops, help);
@@ -183,8 +194,12 @@ export class SigHandler {
       border: config.border,
     });
 
+    const row = fallbackToBelow
+      ? screenrow + 1
+      : screenrow - hiCtx.height - (config.border ? 2 : 0);
+
     const floatingOpt: FloatOption = {
-      row: screenrow - hiCtx.height - (config.border ? 2 : 0),
+      row: row,
       col: col + (await fn.screencol(denops) as number),
       border: config.border,
       height: hiCtx.height,

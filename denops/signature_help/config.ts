@@ -13,6 +13,7 @@ export type Config = {
   style: signatureStyle;
   onTriggerChar: boolean;
   multiLabel: boolean;
+  fallbackToBelow: boolean;
 };
 
 export function getDefaultDocConfig(): Config {
@@ -24,6 +25,7 @@ export function getDefaultDocConfig(): Config {
     style: "full",
     onTriggerChar: false,
     multiLabel: false,
+    fallbackToBelow: true,
   };
 }
 
