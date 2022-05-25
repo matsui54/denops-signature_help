@@ -172,11 +172,11 @@ export class SigHandler {
       config.maxWidth,
     );
     // If screenrow is too small, show signature help below the line.
-    const fallbackToBelow =
-      config.fallbackToBelow && screenrow - 1 <= (config.border ? 2 : 0);
+    const fallbackToBelow = config.fallbackToBelow &&
+      screenrow - 1 <= (config.border ? 2 : 0);
     const maxHeight = Math.min(
       fallbackToBelow ? screenHeight - screenrow : screenrow - 1,
-      config.maxHeight
+      config.maxHeight,
     );
     if (maxHeight <= (config.border ? 2 : 0)) {
       // The screen is too small, give up to show floating window.
