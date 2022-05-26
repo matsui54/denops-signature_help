@@ -71,7 +71,15 @@ export class SigHandler {
 
   private isSameSignature(item: SignatureHelp) {
     if (!this.prevItem || !this.prevItem.signatures) return false;
-    return this.prevItem.signatures[0].label == item.signatures[0].label;
+
+    const activeSignatureOf = (item: SignatureHelp) => {
+      const index = item.activeSignature ?? 0;
+      return Math.max(0, Math.min(index, item.signatures.length - 1));
+    };
+    return (
+      this.prevItem.signatures[activeSignatureOf(this.prevItem)].label ==
+      item.signatures[activeSignatureOf(item)].label
+    );
   }
 
   private isSamePosition(item: SignatureHelp) {
