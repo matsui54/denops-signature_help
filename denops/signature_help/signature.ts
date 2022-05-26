@@ -78,7 +78,7 @@ export class SigHandler {
     };
     return (
       this.prevItem.signatures[activeSignatureOf(this.prevItem)].label ==
-      item.signatures[activeSignatureOf(item)].label
+        item.signatures[activeSignatureOf(item)].label
     );
   }
 
