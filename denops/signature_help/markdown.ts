@@ -75,7 +75,7 @@ export function convertSignatureHelpToMarkdownLines(
   style: signatureStyle,
   multiLabel = false,
 ): [string[], [number, number] | null] | null {
-  if (!signatureHelp.signatures) return null;
+  if (!signatureHelp?.signatures) return null;
   let activeHl: [number, number] = [0, 0];
   let activeSignature = (signatureHelp.activeSignature || 0);
   if (
