@@ -7,10 +7,35 @@ import { getServerCapabilities } from "./integ.ts";
 const defaultTriggerCharacters = [",", "(", "<", "["];
 const triggerCloseCharacters = [")", ">", "]"];
 
+function has_capability(capabilities: ServerCapabilities[] | null) {
+  if (!capabilities) {
+    return false;
+  }
+  for (const cap of capabilities) {
+    if (cap.signatureHelpProvider) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function getTriggerCharacters(capabilities: ServerCapabilities[]) {
+  const triggers = [];
+  for (const cap of capabilities) {
+    if (cap.signatureHelpProvider?.triggerCharacters) {
+      triggers.push(...cap.signatureHelpProvider.triggerCharacters);
+    }
+  }
+  const triggerCharacters = triggers.length > 0
+    ? triggers
+    : defaultTriggerCharacters;
+  return triggerCharacters.concat(triggerCloseCharacters);
+}
+
 export class EventHandler {
   private config: Config = {} as Config;
   private sigHandler = new SigHandler();
-  private capabilities: ServerCapabilities | null = null;
+  private capabilities: ServerCapabilities[] | null = null;
 
   private async getConfig(denops: Denops): Promise<void> {
     const users = await vars.g.get(
@@ -25,36 +50,33 @@ export class EventHandler {
     await this.getConfig(denops);
     this.sigHandler.onInsertEnter();
     this.capabilities = await getServerCapabilities(denops);
-    if (this.capabilities && this.capabilities.signatureHelpProvider) {
+    if (has_capability(this.capabilities)) {
       this.sigHandler.requestSighelp(denops, defaultTriggerCharacters);
     }
   }
 
   async onTextChanged(denops: Denops): Promise<void> {
     if (!this.capabilities) {
-      this.capabilities = await getServerCapabilities(denops);
+      this.capabilities = await getServerCapabilities(
+        denops,
+      ) as ServerCapabilities[];
     }
-    if (
-      !this.capabilities || !this.capabilities.signatureHelpProvider
-    ) {
+    if (!has_capability(this.capabilities)) {
       return;
     }
-    let triggerCharacters = defaultTriggerCharacters;
-    if (this.capabilities.signatureHelpProvider?.triggerCharacters) {
-      triggerCharacters =
-        this.capabilities.signatureHelpProvider.triggerCharacters;
-    }
-    const allTriggerChars = triggerCharacters.concat(triggerCloseCharacters);
+    const triggerCharacters = getTriggerCharacters(this.capabilities);
 
     const cursorCol = await fn.col(denops, ".");
     const line = await fn.getline(denops, ".");
     if (
-      allTriggerChars.includes(line[cursorCol - 2])
+      triggerCharacters.includes(line[cursorCol - 2])
     ) {
       this.sigHandler.requestSighelp(denops, triggerCharacters);
     } else if (this.config.onTriggerChar) {
       if (
-        !allTriggerChars.includes(line.slice(0, cursorCol - 1).trim().slice(-1))
+        !triggerCharacters.includes(
+          line.slice(0, cursorCol - 1).trim().slice(-1),
+        )
       ) {
         this.sigHandler.closeWin(denops);
       }

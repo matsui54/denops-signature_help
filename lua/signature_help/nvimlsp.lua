@@ -24,12 +24,13 @@ local request_signature_help = function(arg)
 end
 
 local get_capabilities = function()
+  local caps = {}
   for _, client in pairs(vim.lsp.buf_get_clients()) do
     if client.server_capabilities then
-      return client.server_capabilities
+      table.insert(caps, client.server_capabilities)
     end
   end
-  return nil
+  return caps
 end
 
 return {
