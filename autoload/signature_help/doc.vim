@@ -129,7 +129,7 @@ function! signature_help#doc#show_floating(opts) abort
       call s:win.set_var('&winblend', opts.winblend)
     endif
   endif
-  if has_key(opts, 'hl') && opts.hl != v:null && len(opts.hl)
+  if has_key(opts, 'hl') && len(opts.hl)
     call signature_help#doc#change_highlight(opts)
   endif
   return s:win.get_winid()

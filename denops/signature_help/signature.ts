@@ -222,7 +222,7 @@ export class SigHandler {
         syntax: "markdown",
         winblend: config.winblend,
         cmds: hiCtx.commands,
-        hl: hl,
+        hl: hl ?? [],
       },
     ) as number;
   }
