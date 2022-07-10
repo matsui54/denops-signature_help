@@ -173,6 +173,8 @@ export function convertSignatureHelpToMarkdownLines(
         );
       }
     }
+  } else if (style == "virtual") {
+    return null;
   }
   if (style == "labelOnly") {
     return [labels, activeHl];
