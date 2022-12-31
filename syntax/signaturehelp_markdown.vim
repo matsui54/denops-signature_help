@@ -10,7 +10,7 @@ syn clear markdownEscape
 syntax region markdownEscape matchgroup=markdownEscape start=/\\\ze[\\\x60*{}\[\]()#+\-,.!_>~|"$%&'\/:;<=?@^ ]/ end=/./ containedin=ALL keepend oneline concealends
 
 " conceal html entities
-syntax match mkdNbsp /&nbsp;/ conceal cchar= 
+syntax match mkdNbsp /&nbsp;/ conceal cchar=
 syntax match mkdLt /&lt;/  conceal cchar=<
 syntax match mkdGt /&gt;/  conceal cchar=>
 syntax match mkdAmp /&amp;/  conceal cchar=&

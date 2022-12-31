@@ -38,7 +38,7 @@ function! signature_help#doc#set_buffer(opts) abort
   call setbufline(bufnr, 1, a:opts.lines)
   call setbufvar(bufnr, '&modified', 0)
   call setbufvar(bufnr, '&bufhidden', 'hide')
-  return bufnr 
+  return bufnr
 endfunction
 
 function! s:get_namespace() abort
@@ -142,7 +142,7 @@ function! signature_help#doc#show_floating(opts) abort
   endif
 
   if has('nvim')
-    call s:win.set_var('&winhighlight', 
+    call s:win.set_var('&winhighlight',
           \ 'NormalFloat:SignatureHelpDocument,FloatBorder:SignatureHelpBorder')
     if opts.winblend
       call s:win.set_var('&winblend', opts.winblend)

@@ -9,12 +9,12 @@ endfunction
 function s:register_autocmd() abort
   augroup DpsSignatureHelp
     autocmd!
-    autocmd TextChangedI,TextChangedP * 
+    autocmd TextChangedI,TextChangedP *
           \ call signature_help#notify('onTextChanged', [])
-    autocmd InsertEnter * 
+    autocmd InsertEnter *
           \ call signature_help#notify('onInsertEnter', [])
 
-    autocmd CursorMoved,InsertLeave * 
+    autocmd CursorMoved,InsertLeave *
          \ call signature_help#doc#close_floating()
 
     autocmd ColorScheme * call <SID>init_highlight()
