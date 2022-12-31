@@ -4,26 +4,61 @@ Shows signature help from lsp server.
 
 ## Features
 
-- works in both Vim and Neovim
-- support both [vim-lsp](https://github.com/prabirshrestha/vim-lsp) and Neovim
-  builtin lsp.
-- support multiple styles of how to show signature help
+- Works in both Vim and Neovim.
+- Support both [vim-lsp](https://github.com/prabirshrestha/vim-lsp) and Neovim builtin lsp.
+- Support multiple styles of how to show signature help.
 
 ## Screenshots
 
-### `style = full`
+### Normal
+
+Configuration
+
+```vim
+let g:signature_help_config = {
+      \ contentsStyle: "full",
+      \ viewStyle: "floating"
+      \ }
+```
 
 ![signature_full](https://user-images.githubusercontent.com/63794197/147875944-4c42a238-e538-43b4-872b-a25958f0523c.gif)
 
-### `style = labelOnly`
+### Only labels
+
+Configuration
+
+```vim
+let g:signature_help_config = {
+      \ contentsStyle: "labels",
+      \ viewStyle: "floating"
+      \ }
+```
 
 ![signature_labelOnly](https://user-images.githubusercontent.com/63794197/147875972-9bede4a6-cd3c-4715-a7e5-cb5fb75276c4.png)
 
-### `style = currentLabelOnly`
+### Only current label
+
+Configuration
+
+```vim
+let g:signature_help_config = {
+      \ contentsStyle: "currentLabel",
+      \ viewStyle: "floating"
+      \ }
+```
 
 ![signature_currentLabelOnly](https://user-images.githubusercontent.com/63794197/147875980-8b79c1da-b4f7-463f-a960-2f6fd8e00ff9.gif)
 
-### `style = virtual`
+### Virtual text style
+
+Configuration
+
+```vim
+let g:signature_help_config = {
+      \ contentsStyle: "remainingLabels",
+      \ viewStyle: "virtual"
+      \ }
+```
 
 In Neovim,
 

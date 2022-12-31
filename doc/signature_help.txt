@@ -19,7 +19,7 @@ Example			|denops-signature_help-example|
 ==============================================================================
 INTRODUCTION					*denops-signature_help-introduction*
 
-*denops-signature_help* shows signature help from lsp server (nvim-lsp and 
+*denops-signature_help* shows signature help from lsp server (nvim-lsp and
 vim-lsp). This works in both Vim and Neovim.
 
 ==============================================================================
@@ -88,8 +88,8 @@ signature help via |hl-LspSignatureActiveParameter|.
 ==============================================================================
 OPTIONS						*denops-signature_help-options*
 
-You can customize |denops-signature_help| with global variable 
-|g:signature_help_config|. 
+You can customize |denops-signature_help| with global variable
+|g:signature_help_config|.
 |g:signature_help_config| is a dictionary which has the following keys.
 
 border					*denops-signature_help-option-border*
@@ -110,17 +110,51 @@ winblend				*denops-signature_help-option-winblend*
 		(default: 'winblend')
 
 style					*denops-signature_help-option-style*
-		Signature help style.
+		DEPRECATED:
+		This option will be removed.
+		Use `contentsStyle` and `viewStyle` options instead,
+		following the alternate config below.
+
+		"full":		Same as >
+				contentsStyle: "full",
+				viewStyle: "floating"
+<
+		"labelOnly":	Same as >
+				contentsStyle: "labels",
+				viewStyle: "floating"
+<
+		"currentLabelOnly":
+				Same as >
+				contentsStyle: "currentLabel",
+				viewStyle: "floating"
+<
+		"virtual":	Same as >
+				contentsStyle: "remainingLabels",
+				viewStyle: "virtual"
+<
+contentsStyle			*denops-signature_help-option-contentsStyle*
+		Style of contents of signature help.
 
 		"full":		Show all information from lsp server.
-		"labelOnly":	Show only label. Documentation is omitted.
-		"currentLabelOnly":	Show only current parameter. This is 
-					the minimal style.
-		"virtual":	Show remaining labels in virtual text UI.
+		"labels":	Show only labels. Documentation is omitted.
+		"currentLabel":	Show only current parameter.
+				This is the minimal style.
+		"remainingLabels":
+				Show parameters after cursor position.
+
+		(default: "full")
+
+viewStyle			*denops-signature_help-option-viewStyle*
+		UI style of signature help.
+
+		"virtual":	Use virtual text UI.
 				It works in both Vim and Neovim.
 				In Vim, popup window is used.
 				In Neovim, |nvim_buf_set_extmark()| is used.
-		(default: "full")
+		"floating":	Use floating/popup window.
+		"ghost":	Use neovim's ghost text (virt lines) feature.
+				This works only in Neovim.
+		(default: "floating")
 
 onTriggerChar 			*denops-signature_help-option-onTriggerChar*
 		If it is true, signature help window (or virtual text) is
@@ -130,7 +164,7 @@ onTriggerChar 			*denops-signature_help-option-onTriggerChar*
 multiLabel 			*denops-signature_help-option-multiLabel*
 		If it is true, all labels are shown when there are multiple
 		labels.
-		This option is only available when 
+		This option is only available when
 		|denops-signature_help-option-style| is "full" or "labelOnly".
 		(default: v:false)
 
@@ -148,7 +182,8 @@ This is the default config.
 	      \ 'border': v:true,
 	      \ 'maxWidth': 80,
 	      \ 'maxHeight': 30,
-	      \ 'style': "full",
+	      \ 'contentsStyle': 'full',
+	      \ 'viewStyle': 'floating',
 	      \ 'onTriggerChar': v:false,
 	      \ 'multiLabel': v:false,
 	      \ 'fallbackToBelow': v:true,
