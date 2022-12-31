@@ -75,7 +75,7 @@ export function convertSignatureHelpToMarkdownLines(
   style: contentsStyle,
   multiLabel = false,
 ): [string[], [number, number] | null] | null {
-  if (!signatureHelp.signatures) return null;
+  if (!signatureHelp?.signatures) return null;
   let activeHl: [number, number] = [0, 0];
   let activeSignature = (signatureHelp.activeSignature || 0);
   if (
@@ -108,7 +108,7 @@ export function convertSignatureHelpToMarkdownLines(
     if (activeParameter < 0 || activeParameter >= signature.parameters.length) {
       activeParameter = 0;
     }
-    if (style == "remaining") {
+    if (style == "remainingLabels") {
       let params: string[] = [];
       for (let i = activeParameter; i < signature.parameters.length; i++) {
         const label = signature.parameters[i];
@@ -126,7 +126,7 @@ export function convertSignatureHelpToMarkdownLines(
     const parameter = signature.parameters[activeParameter];
     if (parameter) {
       if (parameter.label) {
-        if (style == "currentLabelOnly") {
+        if (style == "currentLabel") {
           if (typeof (parameter.label) == "object") {
             return [
               signature.label.slice(...parameter.label).split("\n"),
@@ -173,8 +173,10 @@ export function convertSignatureHelpToMarkdownLines(
         );
       }
     }
+  } else if (style == "remainingLabels") {
+    return null;
   }
-  if (style == "labelOnly") {
+  if (style == "labels") {
     return [labels, activeHl];
   }
   contents = trimLines(contents);

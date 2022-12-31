@@ -1,4 +1,4 @@
-import { Denops, fn, op } from "./deps.ts";
+import { Denops, fn, op, vars } from "./deps.ts";
 import { FloatOption, SignatureHelp } from "./types.ts";
 import { Config } from "./config.ts";
 import { requestSignatureHelp } from "./integ.ts";
@@ -71,7 +71,15 @@ export class SigHandler {
 
   private isSameSignature(item: SignatureHelp) {
     if (!this.prevItem || !this.prevItem.signatures) return false;
-    return this.prevItem.signatures[0].label == item.signatures[0].label;
+
+    const activeSignatureOf = (item: SignatureHelp) => {
+      const index = item.activeSignature ?? 0;
+      return Math.max(0, Math.min(index, item.signatures.length - 1));
+    };
+    return (
+      this.prevItem.signatures[activeSignatureOf(this.prevItem)].label ==
+        item.signatures[activeSignatureOf(item)].label
+    );
   }
 
   private isSamePosition(item: SignatureHelp) {
@@ -174,8 +182,8 @@ export class SigHandler {
         if (this.isSamePosition(help)) {
           return;
         } else if (
-          config.contentsStyle != "currentLabelOnly" &&
-          config.contentsStyle != "remaining"
+          config.contentsStyle != "currentLabel" &&
+          config.contentsStyle != "remainingLabels"
         ) {
           this.changeHighlight(denops, hl);
           this.prevItem = help;
@@ -186,13 +194,23 @@ export class SigHandler {
     this.prevItem = help;
 
     const screenrow = await fn.screenrow(denops) as number;
+    const screenHeight = await vars.options.get(denops, "lines", 0);
     const maxWidth = Math.min(
       await op.columns.get(denops),
       config.maxWidth,
     );
-    const maxHeight = Math.min(screenrow - 1, config.maxHeight);
-    const col = (config.contentsStyle == "currentLabelOnly" ||
-        config.contentsStyle == "remaining")
+    // If screenrow is too small, show signature help below the line.
+    const fallbackToBelow = config.fallbackToBelow &&
+      screenrow - 1 <= (config.border ? 2 : 0);
+    const maxHeight = Math.min(
+      fallbackToBelow ? screenHeight - screenrow : screenrow - 1,
+      config.maxHeight,
+    );
+    if (maxHeight <= (config.border ? 2 : 0)) {
+      // The screen is too small, give up to show floating window.
+      return;
+    }
+    const col = config.contentsStyle == "currentLabel"
       ? 0
       : await this.calcWinPos(denops, help);
 
@@ -204,8 +222,12 @@ export class SigHandler {
       border: config.border,
     });
 
+    const row = fallbackToBelow
+      ? screenrow + 1
+      : screenrow - hiCtx.height - (config.border ? 2 : 0);
+
     const floatingOpt: FloatOption = {
-      row: screenrow - hiCtx.height - (config.border ? 2 : 0),
+      row: row,
       col: col + (await fn.screencol(denops) as number),
       border: config.border,
       height: hiCtx.height,
@@ -220,7 +242,7 @@ export class SigHandler {
         syntax: "markdown",
         winblend: config.winblend,
         cmds: hiCtx.commands,
-        hl: hl,
+        hl: hl ?? [],
       },
     ) as number;
   }

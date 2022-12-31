@@ -130,6 +130,12 @@ multiLabel 			*denops-signature_help-option-multiLabel*
 		|denops-signature_help-option-style| is "full" or "labelOnly".
 		(default: v:false)
 
+fallbackToBelow			*denops-signature_help-option-fallbackToBelow*
+		If it is true, the floating window opens below the cursor if
+		there is not enough space above the cursor; If false, floating
+		window doesn't open in such cases.
+		(default: v:true)
+
 ==============================================================================
 EXAMPLE					*denops-signature_help-example*
 This is the default config.
@@ -141,6 +147,7 @@ This is the default config.
 	      \ 'style': "full",
 	      \ 'onTriggerChar': v:false,
 	      \ 'multiLabel': v:false,
+	      \ 'fallbackToBelow': v:true,
 	      \ }
 >
 ==============================================================================

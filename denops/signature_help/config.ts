@@ -5,10 +5,10 @@ export type signatureStyle =
   | "virtual";
 
 export type contentsStyle =
-  | "labelOnly"
-  | "currentLabelOnly"
   | "full"
-  | "remaining";
+  | "labels"
+  | "currentLabel"
+  | "remainingLabels";
 
 export type viewStyle =
   | "virtual"
@@ -21,11 +21,11 @@ export type Config = {
   maxHeight: number;
   winblend?: number;
   delay: number; // not implemented yet
-  // style: signatureStyle;
   contentsStyle: contentsStyle;
   viewStyle: viewStyle;
   onTriggerChar: boolean;
   multiLabel: boolean;
+  fallbackToBelow: boolean;
 };
 
 export function getDefaultDocConfig(): Config {
@@ -34,11 +34,11 @@ export function getDefaultDocConfig(): Config {
     maxWidth: 80,
     maxHeight: 30,
     delay: 50,
-    // style: "full",
     contentsStyle: "full",
     viewStyle: "floating",
     onTriggerChar: false,
     multiLabel: false,
+    fallbackToBelow: true,
   };
 }
 
@@ -50,16 +50,16 @@ export function makeConfig(userConfig: UserConfig): Config {
   const config: Config = getDefaultDocConfig();
   const style = userConfig.style;
   if (style == "labelOnly") {
-    userConfig.contentsStyle = "labelOnly";
+    userConfig.contentsStyle = "labels";
     userConfig.viewStyle = "floating";
   } else if (style == "currentLabelOnly") {
-    userConfig.contentsStyle = "currentLabelOnly";
+    userConfig.contentsStyle = "currentLabel";
     userConfig.viewStyle = "floating";
   } else if (style == "full") {
     userConfig.contentsStyle = "full";
     userConfig.viewStyle = "floating";
   } else if (style == "virtual") {
-    userConfig.contentsStyle = "remaining";
+    userConfig.contentsStyle = "remainingLabels";
     userConfig.viewStyle = "virtual";
   }
   if (userConfig) {
