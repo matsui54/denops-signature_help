@@ -4,6 +4,7 @@ import { Config } from "./config.ts";
 import { requestSignatureHelp } from "./integ.ts";
 import {
   convertSignatureHelpToMarkdownLines,
+  getHighlights,
   getStylizeCommands,
 } from "./markdown.ts";
 
@@ -112,10 +113,16 @@ export class SigHandler {
     denops: Denops,
     lines: string[],
   ): Promise<void> {
-    if (await fn.has(denops, "nvim")) {
+    if (denops.meta.host == "nvim") {
+      const hc = await getHighlights(denops, lines, {
+        syntax: "markdown",
+        maxWidth: 1000,
+        maxHeight: 1000,
+        border: false,
+      });
       await denops.call(
         "signature_help#doc#show_ghost_text",
-        { lines: lines },
+        { lines: hc.stripped },
       );
     } else {
       console.error("denops-signaturehelp doesn't support ghostText in Vim");
@@ -124,9 +131,16 @@ export class SigHandler {
 
   async showVirtualText(
     denops: Denops,
-    line: string,
+    lines: string[],
   ): Promise<void> {
-    if (await fn.has(denops, "nvim")) {
+    const hc = await getHighlights(denops, lines, {
+      syntax: "markdown",
+      maxWidth: 1000,
+      maxHeight: 1000,
+      border: false,
+    });
+    const line = hc.stripped[0];
+    if (denops.meta.host == "nvim") {
       await denops.call(
         "signature_help#doc#show_virtual_text",
         { line: line },
@@ -170,7 +184,7 @@ export class SigHandler {
     }
 
     if (config.viewStyle == "virtual") {
-      this.showVirtualText(denops, lines[0]);
+      this.showVirtualText(denops, lines);
       return;
     } else if (config.viewStyle == "ghost") {
       this.showGhostText(denops, lines);
