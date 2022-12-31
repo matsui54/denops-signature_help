@@ -113,7 +113,7 @@ function! signature_help#doc#show_ghost_text(opts) abort
 
   call nvim_buf_set_extmark(
         \ 0, s:ns_v, line('.')-1, col('.')-1, {
-        \ 'virt_lines': map(a:opts.lines, { _, l -> [[l, "Comment"]] }),
+        \ 'virt_lines': map(a:opts.lines, { _, l -> [[l, "SignatureHelpGhostText"]] }),
         \ 'priority': 100,
         \ })
   autocmd InsertLeave <buffer> ++once call nvim_buf_clear_namespace(0, s:ns_v, 0, -1)
