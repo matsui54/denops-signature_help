@@ -1,5 +1,4 @@
-import { Denops, fn, gather, vars } from "./deps.ts";
-import { SignatureHelp } from "./types.ts";
+import { Denops, fn, gather, SignatureHelp, vars } from "./deps.ts";
 import { contentsStyle } from "./config.ts";
 
 type MarkedString = string | { language: string; value: string };

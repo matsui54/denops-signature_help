@@ -1,5 +1,5 @@
-import { Denops, fn, vars } from "./deps.ts";
-import { ServerCapabilities, SignatureHelp } from "./types.ts";
+import { Denops, fn, SignatureHelp, vars } from "./deps.ts";
+import { ServerCapabilities } from "./types.ts";
 import { Config, makeConfig } from "./config.ts";
 import { SigHandler } from "./signature.ts";
 import { getServerCapabilities } from "./integ.ts";

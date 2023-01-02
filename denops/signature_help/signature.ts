@@ -1,5 +1,5 @@
-import { Denops, fn, op, vars } from "./deps.ts";
-import { FloatOption, SignatureHelp } from "./types.ts";
+import { Denops, fn, op, SignatureHelp, vars } from "./deps.ts";
+import { FloatOption } from "./types.ts";
 import { Config } from "./config.ts";
 import { requestSignatureHelp } from "./integ.ts";
 import {

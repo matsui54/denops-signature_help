@@ -1,6 +1,5 @@
-import { Denops } from "./deps.ts";
+import { Denops, SignatureHelp } from "./deps.ts";
 import { EventHandler } from "./event.ts";
-import { SignatureHelp } from "./types.ts";
 
 export function main(denops: Denops) {
   const handler = new EventHandler();
