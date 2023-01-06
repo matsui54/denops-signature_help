@@ -77,7 +77,7 @@ export function convertSignatureHelpToMarkdownLines(
 ): [string[], [number, number] | null] | null {
   if (!signatureHelp?.signatures) return null;
   let activeHl: [number, number] = [0, 0];
-  let activeSignature = (signatureHelp.activeSignature || 0);
+  let activeSignature = signatureHelp.activeSignature || 0;
   if (
     activeSignature < 0 || activeSignature >= signatureHelp.signatures.length
   ) {
