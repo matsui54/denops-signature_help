@@ -10,4 +10,3 @@ export * as vars from "https://deno.land/x/denops_std@v5.0.1/variable/mod.ts";
 export * as autocmd from "https://deno.land/x/denops_std@v5.0.1/autocmd/mod.ts";
 export { assertEquals } from "https://deno.land/std@0.173.0/testing/asserts.ts";
 export * as log from "https://deno.land/std@0.173.0/log/mod.ts";
-export { isLike } from "https://deno.land/x/unknownutil@v2.1.0/mod.ts";
