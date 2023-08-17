@@ -1,4 +1,4 @@
-import { Denops, fn, gather } from "./deps.ts";
+import { collect, Denops, fn } from "./deps.ts";
 import { ServerCapabilities } from "./types.ts";
 
 let lspType: "vimlsp" | "nvimlsp" | null;
@@ -10,14 +10,13 @@ export async function getServerCapabilities(
     const servers = await denops.call("lsp#get_allowed_servers") as string[];
     if (servers.length) {
       lspType = "vimlsp";
-      return await gather(denops, async (denops) => {
-        for (const server of servers) {
-          await denops.call(
-            "lsp#get_server_capabilities",
-            server,
-          );
-        }
-      }) as ServerCapabilities[];
+      return await collect(
+        denops,
+        (denops) =>
+          servers.map((server) =>
+            denops.call("lsp#get_server_capabilities", server)
+          ),
+      ) as ServerCapabilities[];
     }
   }
   if (await fn.has(denops, "nvim")) {
