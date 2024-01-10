@@ -46,6 +46,14 @@ export class EventHandler {
     this.config = makeConfig(users);
   }
 
+  async onCursorMovedI(denops: Denops): Promise<void> {
+    await this.getConfig(denops);
+    this.capabilities = await getServerCapabilities(denops);
+    if (has_capability(this.capabilities)) {
+      this.sigHandler.requestSighelp(denops, defaultTriggerCharacters);
+    }
+  }
+
   async onInsertEnter(denops: Denops): Promise<void> {
     await this.getConfig(denops);
     this.sigHandler.onInsertEnter();
