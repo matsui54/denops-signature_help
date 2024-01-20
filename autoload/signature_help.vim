@@ -13,7 +13,7 @@ function s:register_autocmd() abort
           \ call signature_help#notify('onTextChanged', [])
     autocmd InsertEnter *
           \ call signature_help#notify('onInsertEnter', [])
-		autocmd CursorMovedI *
+    autocmd CursorMovedI *
           \ call signature_help#notify('onCursorMovedI', [])
 
     autocmd CursorMoved,InsertLeave *
