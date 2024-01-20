@@ -9,6 +9,9 @@ export function main(denops: Denops) {
     async onTextChanged(_): Promise<void> {
       await handler.onTextChanged(denops);
     },
+    async onCursorMovedI(_): Promise<void> {
+      await handler.onInsertEnter(denops);
+    },
     async onInsertEnter(_): Promise<void> {
       await handler.onInsertEnter(denops);
     },
