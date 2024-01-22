@@ -79,7 +79,7 @@ SignatureHelpVirtual    			*hl-SignatureHelpVirtual*
 		A highlight used for virtual text.
 		default: links to Error.
 
-SignatureHelpVirtual    			*hl-SignatureHelpGhostText*
+SignatureHelpGhostText    			*hl-SignatureHelpGhostText*
 		A highlight used for ghost text (virtual lines).
 		default: links to Comment.
 
