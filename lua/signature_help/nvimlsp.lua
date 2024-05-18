@@ -25,7 +25,7 @@ end
 
 local get_capabilities = function()
   local caps = {}
-  for _, client in pairs(vim.lsp.buf_get_clients()) do
+  for _, client in pairs(vim.lsp.get_clients({ bufnr = api.nvim_get_current_buf() })) do
     if client.server_capabilities then
       table.insert(caps, client.server_capabilities)
     end
