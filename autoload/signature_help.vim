@@ -25,7 +25,7 @@ endfunction
 
 function! s:init_highlight() abort
   highlight default link SignatureHelpDocument NormalFloat
-  highlight default link SignatureHelpBorder NormalFloat
+  highlight default link SignatureHelpBorder FloatBorder
   highlight default link SignatureHelpVirtual Error
   highlight default link SignatureHelpGhostText Comment
 endfunction
