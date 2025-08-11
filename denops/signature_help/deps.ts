@@ -1,12 +1,13 @@
-export type { Denops } from "https://deno.land/x/denops_std@v5.0.1/mod.ts";
+export type { Denops } from "jsr:@denops/std@7.6.0";
+export { batch, collect } from "jsr:@denops/std@7.6.0/batch";
+export * as op from "jsr:@denops/std@7.6.0/option";
+export * as path from "jsr:@std/path@1.1.1";
+export * as fn from "jsr:@denops/std@7.6.0/function";
+export * as nvimFn from "jsr:@denops/std@7.6.0/function/nvim";
+export * as vars from "jsr:@denops/std@7.6.0/variable";
+export * as autocmd from "jsr:@denops/std@7.6.0/autocmd";
 export {
-  batch,
-  collect,
-} from "https://deno.land/x/denops_std@v5.0.1/batch/mod.ts";
-export * as op from "https://deno.land/x/denops_std@v5.0.1/option/mod.ts";
-export * as fn from "https://deno.land/x/denops_std@v5.0.1/function/mod.ts";
-export * as nvimFn from "https://deno.land/x/denops_std@v5.0.1/function/nvim/mod.ts";
-export * as vars from "https://deno.land/x/denops_std@v5.0.1/variable/mod.ts";
-export * as autocmd from "https://deno.land/x/denops_std@v5.0.1/autocmd/mod.ts";
-export { assertEquals } from "https://deno.land/std@0.198.0/testing/asserts.ts";
-export * as log from "https://deno.land/std@0.198.0/log/mod.ts";
+  is,
+  type Predicate,
+} from "jsr:@core/unknownutil@4.3.0";
+export { assertEquals } from "jsr:@std/assert@1.0.13";
