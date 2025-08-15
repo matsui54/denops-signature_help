@@ -11,9 +11,23 @@ local respond = function(item)
   api.nvim_call_function('signature_help#notify', {'respond', {item}})
 end
 
+local get_available_client = function()
+  for _, client in pairs(vim.lsp.get_clients({ bufnr = api.nvim_get_current_buf() })) do
+    if client.server_capabilities and client.server_capabilities.signatureHelpProvider then
+      return client
+    end
+  end
+  return nil
+end
+
 local request_signature_help = function(arg)
-  local params = vim.lsp.util.make_position_params()
-  vim.lsp.buf_request(0, "textDocument/signatureHelp", params, function(_, arg1, arg2)
+  local client = get_available_client()
+  if client == nil then
+    return
+  end
+  local encoding = client.offset_encoding
+  local params = vim.lsp.util.make_position_params(0, encoding)
+  client:request("textDocument/signatureHelp", params, function(_, arg1, arg2)
     local res = is_new_handler(arg1) and arg1 or arg2
     if res and not vim.tbl_isempty(res) and res.signatures and res.signatures[1] then
       respond(res)
