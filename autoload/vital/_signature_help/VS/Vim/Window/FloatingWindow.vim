@@ -211,6 +211,7 @@ function! s:FloatingWindow.open(args) abort
   \   'border': get(a:args, 'border', v:false),
   \   'topline': get(a:args, 'topline', 1),
   \   'origin': get(a:args, 'origin', 'topleft'),
+  \   'zindex': get(a:args, 'zindex', v:null),
   \ }
 
   let l:will_move = self.is_visible()
@@ -375,6 +376,7 @@ if has('nvim')
   function! s:_style(style) abort
     let l:style = s:_resolve_origin(a:style)
     let l:style = s:_resolve_border(l:style)
+    let l:zindex = get(l:style, 'zindex', v:null)
     let l:style = {
     \   'relative': 'editor',
     \   'row': l:style.row - 1,
@@ -385,6 +387,9 @@ if has('nvim')
     \   'style': 'minimal',
     \   'border': has_key(l:style, 'border') ? l:style.border : 'none',
     \ }
+    if l:zindex isnot v:null
+      let l:style.zindex = l:zindex
+    endif
     if !exists('*win_execute') " We can't detect neovim features via patch version so we try it by function existence.
       unlet l:style.border
     endif
@@ -394,7 +399,8 @@ else
   function! s:_style(style) abort
     let l:style = s:_resolve_origin(a:style)
     let l:style = s:_resolve_border(l:style)
-    return {
+    let l:zindex = get(l:style, 'zindex', v:null)
+    let l:result = {
     \   'line': l:style.row,
     \   'col': l:style.col,
     \   'pos': 'topleft',
@@ -412,6 +418,10 @@ else
     \   'borderchars': get(l:style, 'border', []),
     \   'fixed': v:true,
     \ }
+    if l:zindex isnot v:null
+      let l:result.zindex = l:zindex
+    endif
+    return l:result
   endfunction
 endif
 

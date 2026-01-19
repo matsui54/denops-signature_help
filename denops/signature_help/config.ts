@@ -20,6 +20,7 @@ export type Config = {
   maxWidth: number;
   maxHeight: number;
   winblend?: number;
+  zindex?: number;
   delay: number; // not implemented yet
   contentsStyle: contentsStyle;
   viewStyle: viewStyle;
