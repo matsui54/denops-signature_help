@@ -246,6 +246,7 @@ export class SigHandler {
       border: config.border,
       height: hiCtx.height,
       width: hiCtx.width,
+      ...(config.zindex != null ? { zindex: config.zindex } : {}),
     };
 
     await denops.call(

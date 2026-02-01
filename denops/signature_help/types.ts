@@ -27,6 +27,7 @@ export type FloatOption = {
   row?: number;
   col?: number;
   border?: boolean;
+  zindex?: number;
 };
 
 export type ServerCapabilities = {

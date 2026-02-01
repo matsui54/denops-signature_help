@@ -109,6 +109,11 @@ winblend				*denops-signature_help-option-winblend*
 		(Only in Neovim)
 		(default: 'winblend')
 
+zindex					*denops-signature_help-option-zindex*
+		The stacking order of the floating window. Windows with higher
+		zindex values are drawn on top of windows with lower values.
+		(default: not set, uses editor default)
+
 style					*denops-signature_help-option-style*
 		DEPRECATED:
 		This option will be removed.
@@ -187,6 +192,7 @@ This is the default config.
 	      \ 'onTriggerChar': v:false,
 	      \ 'multiLabel': v:false,
 	      \ 'fallbackToBelow': v:true,
+	      \ 'zindex': 50,
 	      \ }
 >
 ==============================================================================
